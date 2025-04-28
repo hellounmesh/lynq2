@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Night Club</title>
+    <style>
+        :root {
+            --color-1: #06141B;
+            --color-2: #11212D;
+            --color-3: #253745;
+            --color-4: #4A5C6A;
+            --color-5: #9BA8AB;
+            --color-6: #CCD0CF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--color-1);
+            color: var(--color-6);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(180deg, rgba(17, 33, 45, 0.8), rgba(37, 55, 69, 0.6));
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1.5rem;
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: var(--color-5);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--color-6);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--color-6);
+            cursor: pointer;
+        }
+
+        .hero {
+            height: 100vh;
+            background: url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(6, 20, 27, 0.7);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            padding: 0 1rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--color-6);
+            animation: neon 1.5s ease-in-out infinite alternate;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-5);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--color-4);
+            color: var(--color-6);
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(74, 92, 106, 0.5);
+        }
+
+        .section {
+            padding: 4rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about {
+            background-color: var(--color-2);
+            text-align: center;
+        }
+
+        .about h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--color-6);
+        }
+
+        .events {
+            background-color: var(--color-3);
+        }
+
+        .events h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--color-6);
+        }
+
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .event-card {
+            background-color: var(--color-4);
+            padding: 1rem;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .event-card:hover {
+            transform: scale(1.05);
+        }
+
+        .event-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: var(--color-6);
+        }
+
+        .event-card p {
+            color: var(--color-5);
+            font-size: 0.9rem;
+        }
+
+        .gallery {
+            background-color: var(--color-2);
+            text-align: center;
+        }
+
+        .gallery h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-6);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            padding: 0 1rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            opacity: 0;
+            animation: fadeIn 1s ease-in forwards;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item:nth-child(1) { animation-delay: 0.2s; }
+        .gallery-item:nth-child(2) { animation-delay: 0.4s; }
+        .gallery-item:nth-child(3) { animation-delay: 0.6s; }
+        .gallery-item:nth-child(4) { animation-delay: 0.8s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        footer {
+            background-color: var(--color-1);
+            padding: 1.5rem;
+            text-align: center;
+            color: var(--color-5);
+        }
+
+        footer p {
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        .social-links a {
+            color: var(--color-5);
+            margin: 0 0.8rem;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--color-6);
+        }
+
+        @keyframes neon {
+            from {
+                text-shadow: 0 0 8px var(--color-5), 0 0 15px var(--color-5), 0 0 25px var(--color-4);
+            }
+            to {
+                text-shadow: 0 0 15px var(--color-6), 0 0 25px var(--color-6), 0 0 35px var(--color-5);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            nav ul {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background-color: var(--color-2);
+                padding: 1rem;
+            }
+
+            nav ul.active {
+                display: flex;
+            }
+
+            nav a {
+                font-size: 1.2rem;
+                padding: 0.5rem 0;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .cta-button {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            .about h2, .events h2, .gallery h2 {
+                font-size: 1.8rem;
+            }
+
+            .event-grid, .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .logo img {
+                height: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero p {
+                font-size: 0.9rem;
+            }
+
+            .section {
+                padding: 3rem 0.8rem;
+            }
+
+            .event-card h3 {
+                font-size: 1.1rem;
+            }
+
+            .event-card p {
+                font-size: 0.8rem;
+            }
+
+            .gallery-item img {
+                height: 150px;
+            }
+
+            footer p {
+                font-size: 0.8rem;
+            }
+
+            .social-links a {
+                font-size: 1rem;
+                margin: 0 0.5rem;
+            }
+
+            .logo img {
+                height: 25px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="logo.png" alt="LYNQ">
+            </div>
+            <div class="menu-toggle">☰</div>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#events">Events</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Welcome to LYNQ</h1>
+            <p>Experience the ultimate vibrant.</p>
+            <a href="#events" class="cta-button">View Events</a>
+        </div>
+    </section>
+
+    <section id="about" class="section about">
+        <h2>About Us</h2>
+        <p>LYNQ is an entertainment platform based in Dubai, focused on providing free invitations for ladies to restaurants, lounges, clubs, and beach clubs. The platform aims to help venues advertise themselves by allowing guests to share their experiences on social media platforms like Instagram, Facebook, and TikTok. LYNQ operates as a social platform where people can sign up, become members, and enjoy the services offered by the platform and its partner venues. To become a member, individuals need to sign up and have their membership approved after their profiles are reviewed. The main goal of LYNQ is to ensure guest satisfaction and provide a platform for venues to effectively promote their businesses.</p>
+    </section>
+
+    <section id="events" class="section events">
+        <h2>Upcoming Events</h2>
+        <div class="event-grid">
+            <div class="event-card">
+                <h3>Neon Nights</h3>
+                <p>Friday, May 10, 2025 | 10 PM</p>
+                <p>Join us for a glowing night of electronic beats and neon vibes.</p>
+            </div>
+            <div class="event-card">
+                <h3>Retro Rewind</h3>
+                <p>Saturday, May 17, 2025 | 9 PM</p>
+                <p>Travel back in time with classic hits from the 80s and 90s.</p>
+            </div>
+            <div class="event-card">
+                <h3>DJ Eclipse</h3>
+                <p>Friday, May 24, 2025 | 11 PM</p>
+                <p>Experience an explosive set by world-renowned DJ Eclipse.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="section gallery">
+        <h2>Our Vibes</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="1.jpg" alt="Club Night">
+            </div>
+            <div class="gallery-item">
+                <img src="2.jpg" alt="Dance Floor">
+            </div>
+            <div class="gallery-item">
+                <img src="3.jpg" alt="DJ Booth">
+            </div>
+            <div class="gallery-item">
+                <img src="4.jpg" alt="Party Crowd">
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <p>Contact us: Email : support@lynqdxb.com| Call : +971 56 757 7963</p>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+        </div>
+        <p>© 2025 LYNQ. All rights reserved.</p>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navUl = document.querySelector('nav ul');
+
+        menuToggle.addEventListener('click', () => {
+            navUl.classList.toggle('active');
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93793bbffa5978cb',t:'MTc0NTg3MTM0NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
+</html>
