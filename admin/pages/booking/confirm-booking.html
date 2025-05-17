@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-fluid position-relative bg-white d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-light navbar-light">
+                <a href="index.html" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>LYNQ ADMIN</h3>
+                </a>
+                <div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="position-relative">
+                        <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                    </div>
+                    <div class="ms-3">
+                        <h6 class="mb-0">Master</h6>
+                        <span>Admin</span>
+                    </div>
+                </div>
+                <div class="navbar-nav w-100">
+                    <!--<a href="index.html" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>-->
+                    <a href="partner.html" class="nav-item nav-link"><i class="fa fa-id-card me-2"></i>Partner</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-user me-2"></i>Member</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="member.html" class="dropdown-item">Member list</a>
+                            <a href="requested-member.html" class="dropdown-item">Requested Member</a>
+                        </div>
+                    </div>
+                    <a href="resturent.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Resturet</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-table me-2"></i>Booking</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="confirm-booking.html" class="dropdown-item">Confirm</a>
+                            <a href="pending-booking.html" class="dropdown-item">Pending</a>
+                        </div>
+                    </div>
+                    <!--<a href="booking.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Booking</a>
+                    <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
+                    <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="signin.html" class="dropdown-item">Sign In</a>
+                            <a href="signup.html" class="dropdown-item">Sign Up</a>
+                            <a href="404.html" class="dropdown-item">404 Error</a>
+                            <a href="blank.html" class="dropdown-item">Blank Page</a>
+                        </div>-->
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
+                <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+                    <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
+                </a>
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <!--<form class="d-none d-md-flex ms-4">
+                    <input class="form-control border-0" type="search" placeholder="Search">
+                </form>-->
+                <div class="navbar-nav align-items-center ms-auto">
+                    <!--<div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fa fa-envelope me-lg-2"></i>
+                            <span class="d-none d-lg-inline-flex">Message</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                            <a href="#" class="dropdown-item">
+                                <div class="d-flex align-items-center">
+                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                    <div class="ms-2">
+                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                </div>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <div class="d-flex align-items-center">
+                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                    <div class="ms-2">
+                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                </div>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <div class="d-flex align-items-center">
+                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                    <div class="ms-2">
+                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                </div>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item text-center">See all message</a>
+                        </div>
+                    </div>-->
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fa fa-bell me-lg-2"></i>
+                            <span class="d-none d-lg-inline-flex">Notificatin</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                            <a href="#" class="dropdown-item">
+                                <h6 class="fw-normal mb-0">Profile updated</h6>
+                                <small>15 minutes ago</small>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <h6 class="fw-normal mb-0">New user added</h6>
+                                <small>15 minutes ago</small>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <h6 class="fw-normal mb-0">Password changed</h6>
+                                <small>15 minutes ago</small>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item text-center">See all notifications</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                            <span class="d-none d-lg-inline-flex">John Doe</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                            <!--<a href="#" class="dropdown-item">My Profile</a>
+                            <a href="#" class="dropdown-item">Settings</a>-->
+                            <a href="#" class="dropdown-item">Log Out</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <!-- Navbar End -->
+
+
+            <!-- Sale & Revenue Start 
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-chart-line fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">Today Sale</p>
+                                <h6 class="mb-0">$1234</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-chart-bar fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">Total Sale</p>
+                                <h6 class="mb-0">$1234</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-chart-area fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">Today Revenue</p>
+                                <h6 class="mb-0">$1234</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-chart-pie fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">Total Revenue</p>
+                                <h6 class="mb-0">$1234</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           Sale & Revenue End -->
+
+
+            <!-- Sales Chart Start
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">Worldwide Sales</h6>
+                                <a href="">Show All</a>
+                            </div>
+                            <canvas id="worldwide-sales"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">Salse & Revenue</h6>
+                                <a href="">Show All</a>
+                            </div>
+                            <canvas id="salse-revenue"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           Sales Chart End -->
+
+<style>/* Basic styles for the modal */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed;
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0); /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4); /* Black with opacity */
+    }
+    
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* Could be more or less, depending on screen size */
+    }
+    
+    /* Close button */
+    .close-btn {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+    
+    .close-btn:hover,
+    .close-btn:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    </style>
+            <!-- Recent Sales Start -->
+            <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light text-center rounded p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <h6 class="mb-0">Recent Salse</h6>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table text-start align-middle table-bordered table-hover mb-0">
+                            <thead>
+                                <tr class="text-dark">
+                                    <th scope="col"><input class="form-check-input" type="checkbox"></th>
+                                    <th scope="col">Date & Time</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Phone</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Insta ID</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input class="form-check-input" type="checkbox"></td>
+                                    <td>01 Jan 2045</td>
+                                    <td>Jhon Doe</td>
+                                    <td>Jhon Doe</td>
+                                    <td>Jhon Doe</td>
+                                    <td>Jhon Doe</td>
+                                    <td><a class="btn btn-sm btn-primary"  id="openModalBtn">Edit</a>|<a class="btn btn-sm btn-primary" href="">Deactive</a></td>
+                                    <!-- Edit Structure -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModalBtn">&times;</span>
+            <h2>Edit Profile</h2>
+            <form id="profileForm">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" value="John Doe"><br><br>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="johndoe@example.com"><br><br>
+
+                <button type="submit">Update</button>
+            </form>
+        </div>
+    </div>
+                                </tr>
+                                <tr>
+                                    <td><input class="form-check-input" type="checkbox"></td>
+                                    <td>01 Jan 2045</td>
+                                    <td>Jhon Doe</td>
+                                    <td>Jhon Doe</td>
+                                    <td>Jhon Doe</td>
+                                    <td>Jhon Doe</td>
+                                    <td><a class="btn btn-sm btn-primary" href="">Edit</a>|<a class="btn btn-sm btn-primary" href="">Deactive</a></td>
+                                </tr>
+                                <tr>
+                                    <td><input class="form-check-input" type="checkbox"></td>
+                                    <td>01 Jan 2045</td>
+                                    <td>Jhon Doe</td>
+                                    <td>Jhon Doe</td>
+                                    <td>Jhon Doe</td>
+                                    <td>Jhon Doe</td>
+                                    <td><a class="btn btn-sm btn-primary" href="">Edit</a>|<a class="btn btn-sm btn-primary" href="">Deactive</a></td>
+                                </tr>
+                                <tr>
+                                    <td><input class="form-check-input" type="checkbox"></td>
+                                    <td>01 Jan 2045</td>
+                                    <td>Jhon Doe</td>
+                                    <td>Jhon Doe</td>
+                                    <td>Jhon Doe</td>
+                                    <td>Jhon Doe</td>
+                                    <td><a class="btn btn-sm btn-primary" href="">Edit</a>|<a class="btn btn-sm btn-primary" href="">Deactive</a></td>
+                                </tr>
+                                <tr>
+                                    <td><input class="form-check-input" type="checkbox"></td>
+                                    <td>01 Jan 2045</td>
+                                    <td>Jhon Doe</td>
+                                    <td>Jhon Doe</td>
+                                    <td>Jhon Doe</td>
+                                    <td>Jhon Doe</td>
+                                    <td><a class="btn btn-sm btn-primary" href="">Edit</a>|<a class="btn btn-sm btn-primary" href="">Deactive</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Recent Sales End -->
+        <!-- Content End -->
+
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/chart/chart.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/tempusdominus/js/moment.min.js"></script>
+    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+<script>
+    // Get modal and buttons
+const modal = document.getElementById("myModal");
+const openModalBtn = document.getElementById("openModalBtn");
+const closeModalBtn = document.getElementById("closeModalBtn");
+
+// Function to open the modal
+openModalBtn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// Function to close the modal
+closeModalBtn.onclick = function() {
+    modal.style.display = "none";
+}
+
+// Close the modal if the user clicks anywhere outside of it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+// Handle form submission (You can add your update logic here)
+document.getElementById("profileForm").onsubmit = function(event) {
+    event.preventDefault(); // Prevent form submission to refresh the page
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+
+    console.log("Updated Name:", name);
+    console.log("Updated Email:", email);
+
+    // Here, you can send the updated data to the server or process it as needed
+    modal.style.display = "none"; // Close the modal after submitting
+}
+</script>
+</body>
+
+</html>

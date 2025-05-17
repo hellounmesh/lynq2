@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="LYNQ Admin Dashboard" name="keywords">
+    <meta content="Admin dashboard for LYNQ to manage members, bookings, events, and sales" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Firebase Compat Libraries -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js"></script>
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-fluid position-relative bg-white d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-light navbar-light">
+                <a href="index.html" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>LYNQ ADMIN</h3>
+                </a>
+                <div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="position-relative">
+                        <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                    </div>
+                    <div class="ms-3">
+                        <h6 class="mb-0">Master</h6>
+                        <span>Admin</span>
+                    </div>
+                </div>
+                <div class="navbar-nav w-100">
+                    <a href="./pages/partner/partner.html" class="nav-item nav-link"><i class="fa fa-id-card me-2"></i>Partner</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-user me-2"></i>Member</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="./pages/member/member.html" class="dropdown-item">Member list</a>
+                            <a href="./pages/member/requested-member.html" class="dropdown-item">Requested Member</a>
+                        </div>
+                    </div>
+                    <a href="./pages/event/event.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Events</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-table me-2"></i>Booking</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="./pages/booking/confirm-booking.html" class="dropdown-item">Confirm</a>
+                            <a href="./pages/booking/pending-booking.html" class="dropdown-item">Pending</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
+                <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+                    <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
+                </a>
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <div class="navbar-nav align-items-center ms-auto">
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fa fa-bell me-lg-2"></i>
+                            <span class="d-none d-lg-inline-flex">Notification</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0" id="notificationDropdown">
+                            <!-- Notifications populated dynamically -->
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                            <span class="d-none d-lg-inline-flex">John Doe</span>
+                        </a>
+                        <!-- <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                            <a href="#" class="dropdown-item" id="profileBtn">Profile</a>
+                        </div> -->
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                            <a href="#" class="dropdown-item" id="logoutBtn">Log Out</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            
+
+            <!-- Dynamic Tables Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <!-- Pending Members Table -->
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">Pending Members</h6>
+                                <a href="./pages/member/member.html">Show All</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                                    <thead>
+                                        <tr class="text-dark">
+                                            <th scope="col"><input class="form-check-input" type="checkbox"></th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">Requested Date</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pendingMembersTable">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Pending Bookings Table -->
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">Pending Bookings</h6>
+                                <a href="pending-booking.html">Show All</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                                    <thead>
+                                        <tr class="text-dark">
+                                            <th scope="col"><input class="form-check-input" type="checkbox"></th>
+                                            <th scope="col">Booking ID</th>
+                                            <th scope="col">Customer</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pendingBookingsTable">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Upcoming Events Table -->
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">Upcoming Events</h6>
+                                <a href="./pages/event/event.html">Show All</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                                    <thead>
+                                        <tr class="text-dark">
+                                            <th scope="col"><input class="form-check-input" type="checkbox"></th>
+                                            <th scope="col">Event Name</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Location</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="upcomingEventsTable">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Pending Events Table -->
+    <div class="col-sm-12 col-xl-6">
+        <div class="bg-light rounded p-4">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h6 class="mb-0">Pending Events</h6>
+                <a href="./pages/event/event.html">Show All</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                    <thead>
+                        <tr class="text-dark">
+                            <th scope="col"><input class="form-check-input" type="checkbox"></th>
+                            <th scope="col">Event Name</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Location</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pendingEventsTable">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+            <!-- Footer Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light rounded-top p-4">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                            © <a href="#">LYNQ</a>, All Right Reserved.
+                        </div>
+                        <div class="col-12 col-sm-6 text-center text-sm-end">
+                            Designed By <a href="https://hucode.tech">HU Code</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/tempusdominus/js/moment.min.js"></script>
+    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+
+    <!-- Custom Javascript -->
+    <!-- <script>
+        const baseURL = "http://localhost:8000";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBHdUEAia7NTucKGIrqPBMSqXV9q0s6mkk",
+            authDomain: "notify-4c612.firebaseapp.com",
+            projectId: "notify-4c612",
+            storageBucket: "notify-4c612.firebasestorage.app",
+            messagingSenderId: "1098548785389",
+            appId: "1:1098548785389:web:5e7ac1b6c981b116b31ce4",
+            measurementId: "G-T355E98TWG"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
+
+        // Check authentication
+        if (!localStorage.getItem("adminToken")) {
+            window.location.href = "login.html";
+        }
+
+        // Fetch data with authentication
+        async function fetchData(endpoint) {
+            try {
+                const response = await fetch(`${baseURL}${endpoint}`, {
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem("adminToken")}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+                if (response.status === 401) {
+                    alert("Session expired. Please log in again.");
+                    localStorage.removeItem("adminToken");
+                    window.location.href = "login.html";
+                }
+                const data = await response.json();
+                return data.data || [];
+            } catch (error) {
+                console.error(`Error fetching ${endpoint}:`, error);
+                return [];
+            }
+        }
+
+        // Populate Pending Members Table
+        async function loadPendingMembers() {
+            const members = await fetchData("/public/pending-members");
+            const tbody = document.getElementById("pendingMembersTable");
+            tbody.innerHTML = members.length ? members.map(member => `
+                <tr>
+                    <td><input class="form-check-input" type="checkbox"></td>
+                    <td>${member.name || "N/A"}</td>
+                    <td>${member.email || "N/A"}</td>
+                    <td>${new Date(member.requestedDate).toLocaleDateString() || "N/A"}</td>
+                    <td><a class="btn btn-sm btn-primary" href="requested-member.html?id=${member._id}">Review</a></td>
+                </tr>
+            `).join("") : "<tr><td colspan='5'>No pending members</td></tr>";
+        }
+
+        // Populate Pending Bookings Table
+        async function loadPendingBookings() {
+            const bookings = await fetchData("/public/pending-bookings");
+            const tbody = document.getElementById("pendingBookingsTable");
+            tbody.innerHTML = bookings.length ? bookings.map(booking => `
+                <tr>
+                    <td><input class="form-check-input" type="checkbox"></td>
+                    <td>${booking.bookingId || "N/A"}</td>
+                    <td>${booking.customer || "N/A"}</td>
+                    <td>${new Date(booking.date).toLocaleDateString() || "N/A"}</td>
+                    <td><a class="btn btn-sm btn-primary" href="pending-booking.html?id=${booking._id}">Review</a></td>
+                </tr>
+            `).join("") : "<tr><td colspan='5'>No pending bookings</td></tr>";
+        }
+
+        // Populate Upcoming Events Table
+        async function loadUpcomingEvents() {
+            const events = await fetchData("/public/upcoming-events");
+            const tbody = document.getElementById("upcomingEventsTable");
+            tbody.innerHTML = events.length ? events.map(event => `
+                <tr>
+                    <td><input class="form-check-input" type="checkbox"></td>
+                    <td>${event.name || "N/A"}</td>
+                    <td>${new Date(event.date).toLocaleDateString() || "N/A"}</td>
+                    <td>${event.location || "N/A"}</td>
+                    <td><a class="btn btn-sm btn-primary" href="event.html?id=${event._id}">Details</a></td>
+                </tr>
+            `).join("") : "<tr><td colspan='5'>No upcoming events</td></tr>";
+        }
+
+        // Populate Recent Sales Table
+        async function loadRecentSales() {
+            const sales = await fetchData("/public/recent-sales");
+            const tbody = document.getElementById("recentSalesTable");
+            tbody.innerHTML = sales.length ? sales.map(sale => `
+                <tr>
+                    <td><input class="form-check-input" type="checkbox"></td>
+                    <td>${new Date(sale.date).toLocaleDateString() || "N/A"}</td>
+                    <td>${sale.invoice || "N/A"}</td>
+                    <td>${sale.customer || "N/A"}</td>
+                    <td>$${sale.amount || 0}</td>
+                    <td>${sale.status || "N/A"}</td>
+                    <td><a class="btn btn-sm btn-primary" href="sale.html?id=${sale._id}">Detail</a></td>
+                </tr>
+            `).join("") : "<tr><td colspan='7'>No recent sales</td></tr>";
+        }
+
+        // Initialize Firebase Messaging
+        async function initializeMessaging() {
+            try {
+                const permission = await Notification.requestPermission();
+                if (permission === "granted") {
+                    const serviceWorkerRegistration = await navigator.serviceWorker.register("../firebase-messaging-sw.js");
+                    const token = await messaging.getToken({
+                        vapidKey: "BNiclUBKzK7-Then1Sa32MeqIECyMRdXo_SZl6koWcgrVVMhMdJpJwaVsj2I2NQbxIQiL48UTbwOpdOkD2AtIPQ",
+                        serviceWorkerRegistration
+                    });
+                    if (token) {
+                        await fetch(`${baseURL}/public/updateToken`, {
+                            method: "POST",
+                            headers: {
+                                "Authorization": `Bearer ${localStorage.getItem("adminToken")}`,
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                email: "admin@example.com", // Replace with actual admin email
+                                deviceToken: token,
+                                platform: "web",
+                                deviceId: localStorage.getItem("deviceId") || `web_${Math.random().toString(36).substr(2, 9)}`,
+                                ipAddress: await (await fetch("https://api.ipify.org?format=json")).json().ip
+                            })
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error("Error initializing messaging:", error);
+            }
+        }
+
+        // Handle notifications
+        messaging.onMessage(payload => {
+            const notification = payload.notification;
+            const dropdown = document.getElementById("notificationDropdown");
+            dropdown.innerHTML = `
+                <a href="#" class="dropdown-item">
+                    <h6 class="fw-normal mb-0">${notification.title}</h6>
+                    <small>${new Date().toLocaleTimeString()}</small>
+                </a>
+                <hr class="dropdown-divider">
+            ` + dropdown.innerHTML;
+        });
+
+        // Logout
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.removeItem("adminToken");
+            window.location.href = "login.html";
+        });
+
+        // Load data on page load
+        window.onload = async () => {
+            await initializeMessaging();
+            await Promise.all([
+                loadPendingMembers(),
+                loadPendingBookings(),
+                loadUpcomingEvents(),
+                loadRecentSales()
+            ]);
+        };
+    </script> -->
+</body>
+
+</html>
