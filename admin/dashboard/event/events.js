@@ -1,13 +1,26 @@
-const baseURL = 'http://localhost:8000'
+const baseURL = 'https://lynqdxb.onrender.com'
 
 const adminToken = localStorage.getItem("adminToken");
 
 if(!adminToken) {
     setTimeout( () => {
-        window.location.href = '../index.html'
+        window.location.href = '../../login/login.html'
 
     },3000)
 }
+
+function logout() {
+    localStorage.removeItem('adminToken')
+    setTimeout( () => {
+        window.location.href = '../../login/login.html'
+
+    },1000)
+}
+
+document.getElementById("logoutBtn").addEventListener("click", (e) => {
+    e.preventDefault()
+    logout();
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     const rowsPerPage = 15;
@@ -54,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         addPartnerSelect.innerHTML = '<option value="">Select Partner</option>';
         editPartnerSelect.innerHTML = '<option value="">Select Partner</option>';
         partners.forEach(partner => {
-            const option = `<option value="${partner._id}">${partner.name}</option>`;
+            const option = `<option value="${partner._id}">${partner.restaurantName}</option>`;
             addPartnerSelect.innerHTML += option;
             editPartnerSelect.innerHTML += option;
         });
@@ -63,14 +76,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fetch events
     async function fetchEvents() {
         try {
+
+            const eventUrl = `${baseURL}/admin/event/viewEvent`
             const skip = (currentPage - 1) * rowsPerPage;
-            const response = await fetch(`YOUR_BACKEND_API_ENDPOINT/events?skip=${skip}&limit=${rowsPerPage}`, {
+            const response = await fetch(`${eventUrl}?skip=${skip}&limit=${rowsPerPage}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
-            if (!response.ok) throw new Error('Failed to fetch events');
+            if (!response.ok) console.log('Failed to fetch events');
             const result = await response.json();
             events = result.data.events || [];
             hasNextPage = events.length === rowsPerPage;

@@ -1,13 +1,26 @@
-const baseURL = 'http://localhost:8000'
+const baseURL = 'https://lynqdxb.onrender.com'
 
 const adminToken = localStorage.getItem("adminToken");
 
 if(!adminToken) {
     setTimeout( () => {
-        window.location.href = '../index.html'
+        window.location.href = '../../login/login.html'
 
     },3000)
 }
+
+function logout() {
+    localStorage.removeItem('adminToken')
+    setTimeout( () => {
+        window.location.href = '../../login/login.html'
+
+    },1000)
+}
+
+document.getElementById("logoutBtn").addEventListener("click", (e) => {
+    e.preventDefault()
+    logout();
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     const rowsPerPage = 15;

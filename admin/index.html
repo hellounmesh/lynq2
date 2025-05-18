@@ -61,20 +61,20 @@
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="./pages/partner/partner.html" class="nav-item nav-link"><i class="fa fa-id-card me-2"></i>Partner</a>
+                    <a href="./dashboard/partner/partner.html" class="nav-item nav-link"><i class="fa fa-id-card me-2"></i>Partner</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-user me-2"></i>Member</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="./pages/member/member.html" class="dropdown-item">Member list</a>
-                            <a href="./pages/member/requested-member.html" class="dropdown-item">Requested Member</a>
+                            <a href="./dashboard/member/member.html" class="dropdown-item">Member list</a>
+                            <a href="./dashboard/member/requested-member.html" class="dropdown-item">Requested Member</a>
                         </div>
                     </div>
-                    <a href="./pages/event/event.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Events</a>
+                    <a href="./dashboard/event/event.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Events</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-table me-2"></i>Booking</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="./pages/booking/confirm-booking.html" class="dropdown-item">Confirm</a>
-                            <a href="./pages/booking/pending-booking.html" class="dropdown-item">Pending</a>
+                            <a href="./dashboard/booking/confirm-booking.html" class="dropdown-item">Confirm</a>
+                            <a href="./dashboard/booking/pending-booking.html" class="dropdown-item">Pending</a>
                         </div>
                     </div>
                 </div>
@@ -126,7 +126,7 @@
                         <div class="bg-light rounded p-4">
                             <div class="d-flex align-items-center justify-content-between mb-4">
                                 <h6 class="mb-0">Pending Members</h6>
-                                <a href="./pages/member/member.html">Show All</a>
+                                <a href="./dashboard/member/member.html">Show All</a>
                             </div>
                             <div class="table-responsive">
                                 <table class="table text-start align-middle table-bordered table-hover mb-0">
@@ -151,7 +151,7 @@
                         <div class="bg-light rounded p-4">
                             <div class="d-flex align-items-center justify-content-between mb-4">
                                 <h6 class="mb-0">Pending Bookings</h6>
-                                <a href="pending-booking.html">Show All</a>
+                                <a href="./dashboard/booking/pending-booking.html">Show All</a>
                             </div>
                             <div class="table-responsive">
                                 <table class="table text-start align-middle table-bordered table-hover mb-0">
@@ -176,7 +176,7 @@
                         <div class="bg-light rounded p-4">
                             <div class="d-flex align-items-center justify-content-between mb-4">
                                 <h6 class="mb-0">Upcoming Events</h6>
-                                <a href="./pages/event/event.html">Show All</a>
+                                <a href="./dashboard/event/event.html">Show All</a>
                             </div>
                             <div class="table-responsive">
                                 <table class="table text-start align-middle table-bordered table-hover mb-0">
@@ -201,7 +201,7 @@
         <div class="bg-light rounded p-4">
             <div class="d-flex align-items-center justify-content-between mb-4">
                 <h6 class="mb-0">Pending Events</h6>
-                <a href="./pages/event/event.html">Show All</a>
+                <a href="./dashboard/event/event.html">Show All</a>
             </div>
             <div class="table-responsive">
                 <table class="table text-start align-middle table-bordered table-hover mb-0">
@@ -256,176 +256,7 @@
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
 
-    <!-- Custom Javascript -->
-    <!-- <script>
-        const baseURL = "http://localhost:8000";
-
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyBHdUEAia7NTucKGIrqPBMSqXV9q0s6mkk",
-            authDomain: "notify-4c612.firebaseapp.com",
-            projectId: "notify-4c612",
-            storageBucket: "notify-4c612.firebasestorage.app",
-            messagingSenderId: "1098548785389",
-            appId: "1:1098548785389:web:5e7ac1b6c981b116b31ce4",
-            measurementId: "G-T355E98TWG"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const messaging = firebase.messaging();
-
-        // Check authentication
-        if (!localStorage.getItem("adminToken")) {
-            window.location.href = "login.html";
-        }
-
-        // Fetch data with authentication
-        async function fetchData(endpoint) {
-            try {
-                const response = await fetch(`${baseURL}${endpoint}`, {
-                    headers: {
-                        "Authorization": `Bearer ${localStorage.getItem("adminToken")}`,
-                        "Content-Type": "application/json"
-                    }
-                });
-                if (response.status === 401) {
-                    alert("Session expired. Please log in again.");
-                    localStorage.removeItem("adminToken");
-                    window.location.href = "login.html";
-                }
-                const data = await response.json();
-                return data.data || [];
-            } catch (error) {
-                console.error(`Error fetching ${endpoint}:`, error);
-                return [];
-            }
-        }
-
-        // Populate Pending Members Table
-        async function loadPendingMembers() {
-            const members = await fetchData("/public/pending-members");
-            const tbody = document.getElementById("pendingMembersTable");
-            tbody.innerHTML = members.length ? members.map(member => `
-                <tr>
-                    <td><input class="form-check-input" type="checkbox"></td>
-                    <td>${member.name || "N/A"}</td>
-                    <td>${member.email || "N/A"}</td>
-                    <td>${new Date(member.requestedDate).toLocaleDateString() || "N/A"}</td>
-                    <td><a class="btn btn-sm btn-primary" href="requested-member.html?id=${member._id}">Review</a></td>
-                </tr>
-            `).join("") : "<tr><td colspan='5'>No pending members</td></tr>";
-        }
-
-        // Populate Pending Bookings Table
-        async function loadPendingBookings() {
-            const bookings = await fetchData("/public/pending-bookings");
-            const tbody = document.getElementById("pendingBookingsTable");
-            tbody.innerHTML = bookings.length ? bookings.map(booking => `
-                <tr>
-                    <td><input class="form-check-input" type="checkbox"></td>
-                    <td>${booking.bookingId || "N/A"}</td>
-                    <td>${booking.customer || "N/A"}</td>
-                    <td>${new Date(booking.date).toLocaleDateString() || "N/A"}</td>
-                    <td><a class="btn btn-sm btn-primary" href="pending-booking.html?id=${booking._id}">Review</a></td>
-                </tr>
-            `).join("") : "<tr><td colspan='5'>No pending bookings</td></tr>";
-        }
-
-        // Populate Upcoming Events Table
-        async function loadUpcomingEvents() {
-            const events = await fetchData("/public/upcoming-events");
-            const tbody = document.getElementById("upcomingEventsTable");
-            tbody.innerHTML = events.length ? events.map(event => `
-                <tr>
-                    <td><input class="form-check-input" type="checkbox"></td>
-                    <td>${event.name || "N/A"}</td>
-                    <td>${new Date(event.date).toLocaleDateString() || "N/A"}</td>
-                    <td>${event.location || "N/A"}</td>
-                    <td><a class="btn btn-sm btn-primary" href="event.html?id=${event._id}">Details</a></td>
-                </tr>
-            `).join("") : "<tr><td colspan='5'>No upcoming events</td></tr>";
-        }
-
-        // Populate Recent Sales Table
-        async function loadRecentSales() {
-            const sales = await fetchData("/public/recent-sales");
-            const tbody = document.getElementById("recentSalesTable");
-            tbody.innerHTML = sales.length ? sales.map(sale => `
-                <tr>
-                    <td><input class="form-check-input" type="checkbox"></td>
-                    <td>${new Date(sale.date).toLocaleDateString() || "N/A"}</td>
-                    <td>${sale.invoice || "N/A"}</td>
-                    <td>${sale.customer || "N/A"}</td>
-                    <td>$${sale.amount || 0}</td>
-                    <td>${sale.status || "N/A"}</td>
-                    <td><a class="btn btn-sm btn-primary" href="sale.html?id=${sale._id}">Detail</a></td>
-                </tr>
-            `).join("") : "<tr><td colspan='7'>No recent sales</td></tr>";
-        }
-
-        // Initialize Firebase Messaging
-        async function initializeMessaging() {
-            try {
-                const permission = await Notification.requestPermission();
-                if (permission === "granted") {
-                    const serviceWorkerRegistration = await navigator.serviceWorker.register("../firebase-messaging-sw.js");
-                    const token = await messaging.getToken({
-                        vapidKey: "BNiclUBKzK7-Then1Sa32MeqIECyMRdXo_SZl6koWcgrVVMhMdJpJwaVsj2I2NQbxIQiL48UTbwOpdOkD2AtIPQ",
-                        serviceWorkerRegistration
-                    });
-                    if (token) {
-                        await fetch(`${baseURL}/public/updateToken`, {
-                            method: "POST",
-                            headers: {
-                                "Authorization": `Bearer ${localStorage.getItem("adminToken")}`,
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                email: "admin@example.com", // Replace with actual admin email
-                                deviceToken: token,
-                                platform: "web",
-                                deviceId: localStorage.getItem("deviceId") || `web_${Math.random().toString(36).substr(2, 9)}`,
-                                ipAddress: await (await fetch("https://api.ipify.org?format=json")).json().ip
-                            })
-                        });
-                    }
-                }
-            } catch (error) {
-                console.error("Error initializing messaging:", error);
-            }
-        }
-
-        // Handle notifications
-        messaging.onMessage(payload => {
-            const notification = payload.notification;
-            const dropdown = document.getElementById("notificationDropdown");
-            dropdown.innerHTML = `
-                <a href="#" class="dropdown-item">
-                    <h6 class="fw-normal mb-0">${notification.title}</h6>
-                    <small>${new Date().toLocaleTimeString()}</small>
-                </a>
-                <hr class="dropdown-divider">
-            ` + dropdown.innerHTML;
-        });
-
-        // Logout
-        document.getElementById("logoutBtn").addEventListener("click", () => {
-            localStorage.removeItem("adminToken");
-            window.location.href = "login.html";
-        });
-
-        // Load data on page load
-        window.onload = async () => {
-            await initializeMessaging();
-            await Promise.all([
-                loadPendingMembers(),
-                loadPendingBookings(),
-                loadUpcomingEvents(),
-                loadRecentSales()
-            ]);
-        };
-    </script> -->
+    
 </body>
 
 </html>

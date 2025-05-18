@@ -19,7 +19,7 @@ const handleLogin = async() => {
         await Notification.requestPermission();
         const token = await messaging.getToken({
             vapidKey: 'BNiclUBKzK7-Then1Sa32MeqIECyMRdXo_SZl6koWcgrVVMhMdJpJwaVsj2I2NQbxIQiL48UTbwOpdOkD2AtIPQ',
-            serviceWorkerRegistration: await navigator.serviceWorker.register('../../firebase-messaging-sw.js')
+            serviceWorkerRegistration: await navigator.serviceWorker.register('../firebase-messaging-sw.js')
           });
 
           if (!token) {
@@ -38,6 +38,8 @@ const handleLogin = async() => {
 
         }
 
+        console.log("payload",payload)
+
         const resp = await fetch(`${baseURL}/public/admin/signIn`, {
             method: "POST",
             headers: {
@@ -53,7 +55,7 @@ const handleLogin = async() => {
             localStorage.setItem("adminToken",token)
           
             setTimeout( () => {
-                window.location.href = '../../index.html';
+                window.location.href = '../index.html';
 
             },3000)
         }else {

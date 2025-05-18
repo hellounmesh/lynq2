@@ -33,7 +33,7 @@
 })(jQuery);
 
 
-const baseURL = 'http://localhost:8000'
+const baseURL = 'https://lynqdxb.onrender.com'
 const partnerSubmitBtn = document.getElementById("partnerSubmitBtn");
 const partnerForm = document.getElementById('partnerForm')
 
@@ -41,7 +41,7 @@ const adminToken = localStorage.getItem("adminToken");
 
 if(!adminToken) {
     setTimeout( () => {
-        window.location.href = '../pages/login/login.html'
+        window.location.href = '../../login/login.html'
 
     },3000)
 }
@@ -49,7 +49,7 @@ if(!adminToken) {
 function logout() {
     localStorage.removeItem('adminToken')
     setTimeout( () => {
-        window.location.href = '../login/login.html'
+        window.location.href = '../../login/login.html'
 
     },1000)
 }
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pagination = document.getElementById('pagination');
     const pageInfo = document.getElementById('pageInfo');
     const selectAll = document.getElementById('selectAll');
-    const partnerForm = document.getElementById('partnerForm');
+    
 
     // Function to fetch partner data for the current page
     async function fetchPartners() {
@@ -273,25 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Form submission for adding a partner
-    partnerForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const formData = new FormData(partnerForm);
-
-        try {
-            const response = await fetch('YOUR_BACKEND_API_ENDPOINT/partners', {
-                method: 'POST',
-                body: formData,
-            });
-            if (!response.ok) throw new Error('Failed to add partner');
-            alert('Partner added successfully!');
-            partnerForm.reset();
-            fetchPartners(); // Refresh current page
-        } catch (error) {
-            console.error('Error adding partner:', error);
-            alert('Failed to add partner. Please try again.');
-        }
-    });
+    
 
     // Initial fetch
     fetchPartners();

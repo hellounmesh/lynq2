@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -8,7 +7,7 @@
     <meta content="" name="description">
 
     <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
+    <link href="../../img/favicon.ico" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,8 +27,59 @@
 
     <!-- Template Stylesheet -->
     <link href="../../css/style.css" rel="stylesheet">
-</head>
 
+    <!-- Custom Styles for Partner View -->
+    <style>
+        .partner-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        .partner-card:hover {
+            transform: translateY(-5px);
+        }
+        .partner-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        .gallery-img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+        .gallery-img:hover {
+            opacity: 0.8;
+        }
+        .badge {
+            font-size: 14px;
+            padding: 6px 12px;
+        }
+        .back-btn {
+            margin-bottom: 20px;
+        }
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+            .gallery-img {
+                height: 80px;
+            }
+        }
+    </style>
+</head>
 <body>
     <div class="container-fluid position-relative bg-white d-flex p-0">
         <!-- Spinner Start -->
@@ -39,7 +89,6 @@
             </div>
         </div>
         <!-- Spinner End -->
-
 
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
@@ -58,8 +107,7 @@
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <!--<a href="index.html" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>-->
-                    <a href="../partner/partner.html" class="nav-item nav-link"><i class="fa fa-id-card me-2"></i>Partner</a>
+                    <a href="../partner/partner.html" class="nav-item nav-link active"><i class="fa fa-id-card me-2"></i>Partner</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-user me-2"></i>Member</a>
                         <div class="dropdown-menu bg-transparent border-0">
@@ -67,21 +115,18 @@
                             <a href="../member/requested-member.html" class="dropdown-item">Requested Member</a>
                         </div>
                     </div>
-                    <a href="../event/event.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Events</a>
+                    <a href="../event/event.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Event</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-table me-2"></i>Booking</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="../member/member.html" class="dropdown-item">Confirm</a>
-                            <a href="../member/requested-member.html" class="dropdown-item">Pending</a>
+                            <a href="../booking/confirm-booking.html" class="dropdown-item">Confirm</a>
+                            <a href="../booking/pending-booking.html" class="dropdown-item">Pending</a>
                         </div>
-                    </div>
-                    
                     </div>
                 </div>
             </nav>
         </div>
         <!-- Sidebar End -->
-
 
         <!-- Content Start -->
         <div class="content">
@@ -93,15 +138,11 @@
                 <a href="#" class="sidebar-toggler flex-shrink-0">
                     <i class="fa fa-bars"></i>
                 </a>
-                <!--<form class="d-none d-md-flex ms-4">
-                    <input class="form-control border-0" type="search" placeholder="Search">
-                </form>-->
                 <div class="navbar-nav align-items-center ms-auto">
-                    
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <i class="fa fa-bell me-lg-2"></i>
-                            <span class="d-none d-lg-inline-flex">Notificatin</span>
+                            <span class="d-none d-lg-inline-flex">Notification</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">
@@ -127,9 +168,6 @@
                             <img class="rounded-circle me-lg-2" src="../../img/user.jpg" alt="" style="width: 40px; height: 40px;">
                             <span class="d-none d-lg-inline-flex">John Doe</span>
                         </a>
-                        <!-- <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item" id="profileBtn">Profile</a>
-                        </div> -->
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item" id="logoutBtn">Log Out</a>
                         </div>
@@ -138,135 +176,33 @@
             </nav>
             <!-- Navbar End -->
 
-
-           
-<!-- Add pertner Start-->
-<div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-      <div class="col-sm-12 col-xl-12">
-        <div class="bg-light rounded h-100 p-4">
-          <h6 class="mb-4">Add Partner</h6>
-          <form id="partnerForm" enctype="multipart/form-data">
-            
-            <!-- Partner Name -->
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="name" placeholder="Partner Name" required>
-              <label for="name">Partner Name</label>
-            </div>
-  
-            <!-- Email -->
-            <div class="form-floating mb-3">
-              <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
-              <label for="email">Email address</label>
-            </div>
-            <!-- Passsword -->
-             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="password" placeholder="jlanajn5sad@" required>
-                <label for="password">Password</label>
-
-             </div>
-  
-            <!-- Phone Number -->
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="phone" placeholder="Phone Number" required>
-              <label for="phone">Phone Number</label>
-            </div>
-  
-            <!-- Company Name -->
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="restaurentName" placeholder="Restaurent Name" required>
-              <label for="restaurentName">Restaurent Name</label>
-            </div>
-  
-            <!-- Address Line 1 -->
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="addressLine1" placeholder="Address Line 1" required>
-              <label for="addressLine1">Address Line 1</label>
-            </div>
-  
-            <!-- Address Line 2 -->
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="addressLine2" placeholder="Address Line 2">
-              <label for="addressLine2">Address Line 2</label>
-            </div>
-  
-            <!-- Country -->
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="country" placeholder="Country" required>
-              <label for="country">Country</label>
-            </div>
-  
-            <!-- Thumbnail Image Upload -->
-            <div class="mb-3">
-              <label for="thumbnail" class="form-label">Upload Thumbnail Image</label>
-              <input class="form-control" type="file" id="thumbnail" accept="image/*" required>
-            </div>
-  
-            <!-- Slide Images Upload (Multiple) -->
-            <div class="mb-3">
-              <label for="slideImages" class="form-label">Upload Slide Images</label>
-              <input class="form-control" type="file" id="slideImages" accept="image/*" multiple required>
-            </div>
-  
-            <button type="submit" class="btn btn-primary" id="partnerSubmitBtn">Add Partner</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-<!-- Add pertner End-->
-
-<!-- Partner Details Start -->
-<div class="container-fluid pt-4 px-4">
-    <div class="bg-light text-center rounded p-4">
-        <div class="d-flex align-items-center justify-content-between mb-4">
-            <h6 class="mb-0">Partner Details</h6>
-        </div>
-        <div class="table-responsive">
-            <table class="table text-start align-middle table-bordered table-hover mb-0" id="partnerTable">
-                <thead>
-                    <tr class="text-dark">
-                        <th scope="col"><input type="checkbox" id="selectAll"></th>
-                        <th scope="col">Owner Name</th>
-                        <th scope="col">Restaurant Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Phone</th>
-                        <th scope="col">Password</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="partnerTableBody">
-                    <!-- Rows will be dynamically populated via JavaScript -->
-                </tbody>
-            </table>
-            <!-- Pagination Controls -->
-            <div class="d-flex justify-content-between mt-3">
-                <div>
-                    <span id="pageInfo">Showing 1 to 15 of unknown entries</span>
+            <!-- Partner Details Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light rounded p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h6 class="mb-0">Partner Details</h6>
+                        <a href="./partner.html" class="btn btn-primary back-btn"><i class="fa fa-arrow-left me-2"></i>Back to Partners</a>
+                    </div>
+                    <div id="partnerDetails" class="partner-card">
+                        <!-- Partner details will be dynamically populated -->
+                        <div class="text-center">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <nav>
-                    <ul class="pagination" id="pagination">
-                        <!-- Pagination links will be dynamically generated -->
-                    </ul>
-                </nav>
             </div>
-        </div>
-    </div>
-</div>
-<!-- Partner Details End -->
-
+            <!-- Partner Details End -->
 
             <!-- Footer Start -->
             <div class="container-fluid pt-4 px-4">
                 <div class="bg-light rounded-top p-4">
                     <div class="row">
                         <div class="col-12 col-sm-6 text-center text-sm-start">
-                            &copy; <a href="#">LYNQ</a>, All Right Reserved. 
+                            © <a href="#">LYNQ</a>, All Right Reserved. 
                         </div>
                         <div class="col-12 col-sm-6 text-center text-sm-end">
-                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
                             Designed By <a href="https://hucode.tech">HU Code</a>
                         </div>
                     </div>
@@ -276,7 +212,6 @@
         </div>
         <!-- Content End -->
 
-
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
@@ -284,7 +219,6 @@
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../../lib/chart/chart.min.js"></script>
     <script src="../../lib/easing/easing.min.js"></script>
     <script src="../../lib/waypoints/waypoints.min.js"></script>
     <script src="../../lib/owlcarousel/owl.carousel.min.js"></script>
@@ -292,9 +226,8 @@
     <script src="../../lib/tempusdominus/js/moment-timezone.min.js"></script>
     <script src="../../lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
-    <!-- Template Javascript -->
-    <!-- <script src="js/main.js"></script> -->
+    <!-- Custom JavaScript -->
+    <!-- <script src="js/partner-details.js"></script> -->
+    <script type="module" src="./partner-details.js"></script>
 </body>
-<!-- <script src="./js/partner.js"></script> -->
-<script type="module" src="./partner.js"></script>
 </html>
