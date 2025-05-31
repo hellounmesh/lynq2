@@ -1,4 +1,4 @@
-const baseURL = 'https://lynqdxb.onrender.com'
+const baseURL = ' http://localhost:8000'
 
 const adminToken = localStorage.getItem("adminToken");
 
@@ -72,21 +72,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 const row = document.createElement('tr');
                 const createdAt = new Date(member.createdAt).toLocaleString();
                 const statusClass = member.status === 'active' ? 'bg-success' : member.status === 'pending' ? 'bg-warning' : 'bg-danger';
-                row.innerHTML = `
-                    <td><input type="checkbox" class="row-checkbox"></td>
-                    <td>${createdAt || 'N/A'}</td>
-                    <td>${member.name || 'N/A'}</td>
-                    <td>${member.mobile || 'N/A'}</td>
-                    <td>${member.email || 'N/A'}</td>
-                    <td>${member.instaId || 'N/A'}</td>
-                    <td><span class="badge ${statusClass}">${member.status.charAt(0).toUpperCase() + member.status.slice(1)}</span></td>
-                    <td>
-                        <a class="btn btn-sm btn-primary edit-btn" href="#" data-id="${member._id}">Edit</a> |
-                        <a class="btn btn-sm btn-${member.status === 'active' ? 'danger' : 'success'} deactivate-btn" href="#" data-id="${member._id}">
-                            ${member.status === 'active' ? 'Deactivate' : 'Activate'}
-                        </a>
-                    </td>
-                `;
+                // In renderTable function
+row.innerHTML = `
+    <td><input type="checkbox" class="row-checkbox"></td>
+    <td>${createdAt || 'N/A'}</td>
+    <td>${member.name || 'N/A'}</td>
+    <td>${member.mobile || 'N/A'}</td>
+    <td>${member.email || 'N/A'}</td>
+    <td>${member.instaId || 'N/A'}</td>
+    <td><span class="badge ${statusClass}">${member.status.charAt(0).toUpperCase() + member.status.slice(1)}</span></td>
+    <td>
+        <a class="btn btn-sm btn-primary" href="view_member.html?id=${member._id}">View</a> |
+        <a class="btn btn-sm btn-${member.status === 'active' ? 'danger' : 'success'} deactivate-btn" href="#" data-id="${member._id}">
+            ${member.status === 'active' ? 'Deactivate' : 'Activate'}
+        </a>
+    </td>
+`;
                 tableBody.appendChild(row);
             });
         }

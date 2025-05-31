@@ -33,7 +33,7 @@
 })(jQuery);
 
 
-const baseURL = 'https://lynqdxb.onrender.com'
+const baseURL = ' http://localhost:8000'
 const partnerSubmitBtn = document.getElementById("partnerSubmitBtn");
 const partnerForm = document.getElementById('partnerForm')
 

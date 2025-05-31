@@ -11,6 +11,7 @@
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Icon Font Stylesheet -->
@@ -19,7 +20,7 @@
 
     <!-- Libraries Stylesheet -->
     <link href="../../lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="../../lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet">
+    <link href="../../lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="../../css/bootstrap.min.css" rel="stylesheet">
@@ -27,128 +28,45 @@
     <!-- Template Stylesheet -->
     <link href="../../css/style.css" rel="stylesheet">
 
-    <!-- Luxon for DateTime -->
-    <script src="https://moment.github.io/luxon/global/luxon.min.js"></script>
-
     <!-- Custom Styles -->
     <style>
-        #eventTable {
-            font-size: 14px;
-        }
-        #eventTable th, #eventTable td {
-            padding: 8px;
-            vertical-align: middle;
-        }
-        .pagination {
-            margin-bottom: 0;
-        }
-        .badge {
-            font-size: 12px;
-            padding: 5px 10px;
-        }
-        .table-responsive {
-            max-height: 600px;
-            overflow-y: auto;
-        }
-        .form-section {
+        .member-details {
             background-color: #f8f9fa;
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 20px;
         }
-        .form-section h3 {
+        .member-details h3 {
             margin-bottom: 20px;
         }
-        .date-time-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .date-time-group div {
-            flex: 1;
-            min-width: 150px;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.5);
-        }
-        .modal-content {
+        .detail-card {
             background-color: #fff;
-            margin: 5% auto;
-            padding: 20px;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 600px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        .close-btn {
-            color: #aaa;
-            float: right;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close-btn:hover {
-            color: #000;
-        }
-        .modal-content h2 {
-            margin-top: 0;
-            font-size: 1.5rem;
-        }
-        .modal-content label, .form-section label {
-            display: block;
-            margin: 10px 0 5px;
-            font-weight: 500;
-        }
-        .modal-content input, .modal-content select, .modal-content textarea,
-        .form-section input, .form-section select, .form-section textarea {
-            width: 100%;
-            padding: 8px;
             border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
         }
-        .modal-content textarea, .form-section textarea {
-            resize: vertical;
-            min-height: 80px;
+        .detail-card h5 {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
         }
-        .modal-content input[type="file"], .form-section input[type="file"] {
-            padding: 3px;
+        .detail-card p {
+            margin: 5px 0;
         }
-        .modal-content button, .form-section button {
-            background-color: #007bff;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        .modal-content button:hover, .form-section button:hover {
-            background-color: #0056b3;
-        }
-        .current-photos {
-            margin: 10px 0;
-        }
-        .current-photos img {
-            max-width: 100px;
+        .profile-photo img,
+        .gallery img {
+            max-width: 150px;
             height: auto;
             border-radius: 4px;
             margin: 5px;
         }
-        .remove-img {
-            color: #dc3545;
-            cursor: pointer;
-            margin-left: 5px;
+        .action-buttons .btn {
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .badge {
+            font-size: 12px;
+            padding: 5px 10px;
         }
     </style>
 </head>
@@ -181,13 +99,12 @@
                 <div class="navbar-nav w-100">
                     <a href="../partner/partner.html" class="nav-item nav-link"><i class="fa fa-id-card me-2"></i>Partner</a>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-user me-2"></i>Member</a>
+                        <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown"><i class="fa fa-user me-2"></i>Member</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="../member/member.html" class="dropdown-item">Member list</a>
-                            <a href="../member/requested-member.html" class="dropdown-item">Requested Member</a>
+                            <a href="member.html" class="dropdown-item">Member list</a>
                         </div>
                     </div>
-                    <a href="../event/event.html" class="nav-item nav-link active"><i class="fa fa-calendar-alt me-2"></i>Events</a>
+                    <a href="../event/event.html" class="nav-item nav-link"><i class="fa fa-calendar-alt me-2"></i>Events</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-table me-2"></i>Booking</a>
                         <div class="dropdown-menu bg-transparent border-0">
@@ -241,86 +158,30 @@
                             <span class="d-none d-lg-inline-flex">John Doe</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item" id="logoutBtn">Log Out</a>
+                            <a href="#" class="dropdown-item">Log Out</a>
                         </div>
                     </div>
                 </div>
             </nav>
             <!-- Navbar End -->
 
-            <!-- Add Event Form Start -->
+            <!-- Member Details Start -->
             <div class="container-fluid pt-4 px-4">
-                <div class="form-section">
-                    <h3>Add New Event</h3>
-                    <form id="addEventForm" enctype="multipart/form-data">
-                        <label for="partnerId">Partner (Restaurant):</label>
-                        <select id="partnerId" name="restaurentId" required>
-                            <option value="">Select Partner</option>
-                            <!-- Populated dynamically -->
-                        </select>
-                            <!-- Add more as needed -->
-                       
-
-                        <div class="date-time-group">
-                            <div>
-                                <label for="fromDate">From Date:</label>
-                                <input type="datetime-local" id="fromDate" name="fromDate" required>
-                            </div>
-                            <div>
-                                <label for="toDate">To Date:</label>
-                                <input type="datetime-local" id="toDate" name="toDate" required>
-                            </div>
-                        </div>
-
-                        <label for="description">Event Description:</label>
-                        <textarea id="description" name="description" required></textarea>
-
-                        <label for="eventPhoto">Event Photos:</label>
-                        <input type="file" id="eventPhoto" name="eventPhoto" accept="image/*" multiple>
-
-                        <button type="submit">Add Event</button>
-                    </form>
-                </div>
-            </div>
-            <!-- Add Event Form End -->
-
-            <!-- Event List Start -->
-            <div class="container-fluid pt-4 px-4">
-                <div class="bg-light text-center rounded p-4">
-                    <div class="d-flex align-items-center justify-content-between mb-4">
-                        <h6 class="mb-0">All Events</h6>
+                <div class="member-details">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3>Member Details</h3>
+                        <a href="./member.html" class="btn btn-secondary"><i class="fa fa-arrow-left me-2"></i>Back to Member List</a>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table text-start align-middle table-bordered table-hover mb-0" id="eventTable">
-                            <thead>
-                                <tr class="text-dark">
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Partner</th>
-                                    <th scope="col">Description</th>
-                                    <th scope="col">Time</th>
-                                    <th scope="col">Time Zone</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="eventTableBody">
-                                <!-- Rows will be dynamically populated -->
-                            </tbody>
-                        </table>
-                        <div class="d-flex justify-content-between mt-3">
-                            <div>
-                                <span id="pageInfo">Showing 1 to 15 of unknown entries</span>
-                            </div>
-                            <nav>
-                                <ul class="pagination" id="pagination">
-                                    <!-- Pagination links -->
-                                </ul>
-                            </nav>
-                        </div>
+                    <div class="action-buttons">
+                        <button id="statusBtn" class="btn btn-sm btn-success"></button>
+                        <button id="deleteBtn" class="btn btn-sm btn-danger"><i class="fa fa-trash me-2"></i>Delete Member</button>
+                    </div>
+                    <div id="memberDetails">
+                        <!-- Details will be dynamically populated -->
                     </div>
                 </div>
             </div>
-            <!-- Event List End -->
+            <!-- Member Details End -->
 
             <!-- Footer Start -->
             <div class="container-fluid pt-4 px-4">
@@ -354,6 +215,6 @@
     <script src="../../lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <!-- Custom JavaScript -->
-    <script type="module" src="./events.js"></script>
+    <script src="./view_memeber.js"></script>
 </body>
 </html>

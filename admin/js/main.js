@@ -62,7 +62,7 @@
 })(jQuery);
 
 
-const baseURL = 'https://lynqdxb.onrender.com'
+const baseURL = ' http://localhost:8000'
 
 const adminToken = localStorage.getItem("adminToken");
 
@@ -117,7 +117,7 @@ async function loadPendingMembers() {
             <td>${member.name || "N/A"}</td>
             <td>${member.email || "N/A"}</td>
             <td>${new Date(member.createdAt).toLocaleDateString() || "N/A"}</td>
-            <td><a class="btn btn-sm btn-primary" href="requested-member.html?id=${member._id}">Review</a></td>
+            <td><a class="btn btn-sm btn-primary" href="./dashboard/member/view_member.html?id=${member._id}">Review</a></td>
         </tr>
     `).join("") : "<tr><td colspan='5'>No pending members</td></tr>";
 }

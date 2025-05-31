@@ -1,301 +1,191 @@
-const baseURL = 'https://lynqdxb.onrender.com'
+const { DateTime } = luxon;
+const baseURL = 'http://localhost:8000';
+const adminToken = localStorage.getItem('adminToken');
 
-const adminToken = localStorage.getItem("adminToken");
-
-if(!adminToken) {
-    setTimeout( () => {
-        window.location.href = '../../login/login.html'
-
-    },3000)
+if (!adminToken) {
+    alert('Please log in to access this page.');
+    setTimeout(() => {
+        window.location.href = '../../login/login.html';
+    }, 1000);
 }
 
 function logout() {
-    localStorage.removeItem('adminToken')
-    setTimeout( () => {
-        window.location.href = '../../login/login.html'
-
-    },1000)
+    localStorage.removeItem('adminToken');
+    setTimeout(() => {
+        window.location.href = '../../login/login.html';
+    }, 1000);
 }
 
-document.getElementById("logoutBtn").addEventListener("click", (e) => {
-    e.preventDefault()
+document.getElementById('logoutBtn').addEventListener('click', (e) => {
+    e.preventDefault();
     logout();
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const rowsPerPage = 15;
-    let currentPage = 1;
-    let events = [];
-    let partners = [];
-    let hasNextPage = true;
-    let maxKnownPage = 1;
-    const token = adminToken; // Replace with actual token (e.g., from localStorage)
-
-    const tableBody = document.getElementById('eventTableBody');
-    const pagination = document.getElementById('pagination');
-    const pageInfo = document.getElementById('pageInfo');
-    const selectAll = document.getElementById('selectAll');
+    console.log('events.js loaded');
     const addEventForm = document.getElementById('addEventForm');
-    const editEventForm = document.getElementById('editEventForm');
-    const modal = document.getElementById('editModal');
-    const closeModalBtn = document.getElementById('closeModalBtn');
+    const eventTableBody = document.getElementById('eventTableBody');
+    const pageInfo = document.getElementById('pageInfo');
+    const pagination = document.getElementById('pagination');
+    let currentPage = 1;
+    const limit = 15;
 
-    // Fetch partners for dropdowns
-    async function fetchPartners() {
+    // Format date for display
+    function formatDisplayDate(date,timeZone) {
+        return new Date(date).toLocaleDateString('en-US', {
+            timeZone:timeZone,
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+    }
+
+    // Fetch partners for dropdown
+    async function populatePartners(selectElement) {
         try {
-            const partnerurl = `${baseURL}/admin/partner/allPartner?skip=0&limit=100`
-            const response = await fetch(partnerurl, {
+            const response = await fetch(`${baseURL}/admin/partner/name`, {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${adminToken}`,
                     'Content-Type': 'application/json'
                 }
             });
             if (response.status !== 200) throw new Error('Failed to fetch partners');
             const result = await response.json();
-            partners = result.data.partners || [];
-            populatePartnerDropdowns();
+            if (result.status !== 'Success' || !result.data.partners) throw new Error('Invalid response');
+            selectElement.innerHTML = '<option value="">Select Partner</option>';
+            result.data.partners.forEach(partner => {
+                const option = document.createElement('option');
+                option.value = partner._id;
+                option.textContent = partner.restaurantName;
+                selectElement.appendChild(option);
+            });
         } catch (error) {
             console.error('Error fetching partners:', error);
-            alert('Failed to load partners. Please try again.');
+            selectElement.innerHTML = '<option value="">Error loading partners</option>';
         }
-    }
-
-    // Populate partner dropdowns
-    function populatePartnerDropdowns() {
-        const addPartnerSelect = document.getElementById('partnerId');
-        const editPartnerSelect = document.getElementById('editPartnerId');
-        addPartnerSelect.innerHTML = '<option value="">Select Partner</option>';
-        editPartnerSelect.innerHTML = '<option value="">Select Partner</option>';
-        partners.forEach(partner => {
-            const option = `<option value="${partner._id}">${partner.restaurantName}</option>`;
-            addPartnerSelect.innerHTML += option;
-            editPartnerSelect.innerHTML += option;
-        });
     }
 
     // Fetch events
-    async function fetchEvents() {
+    async function fetchEvents(page = 1) {
         try {
-
-            const eventUrl = `${baseURL}/admin/event/viewEvent`
-            const skip = (currentPage - 1) * rowsPerPage;
-            const response = await fetch(`${eventUrl}?skip=${skip}&limit=${rowsPerPage}`, {
+            console.log('Fetching events, page:', page);
+            const response = await fetch(`${baseURL}/admin/event/viewEvent?page=${page}&limit=${limit}`, {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${adminToken}`,
                     'Content-Type': 'application/json'
                 }
             });
-            if (!response.ok) console.log('Failed to fetch events');
+            if (response.status !== 200) throw new Error(`Failed to fetch events: ${response.status}`);
             const result = await response.json();
-            events = result.data.events || [];
-            hasNextPage = events.length === rowsPerPage;
-            if (currentPage > maxKnownPage) maxKnownPage = currentPage;
-            renderTable();
-            renderPagination();
-            document.getElementById('spinner').classList.remove('show');
+            if (result.status !== 'Success' || !result.data.events) throw new Error('Invalid response');
+            renderEvents(result.data.events, result.data.total, result.data.page, result.data.pages);
         } catch (error) {
             console.error('Error fetching events:', error);
-            alert('Failed to load events. Please try again.');
+            eventTableBody.innerHTML = '<tr><td colspan="7" class="text-center text-danger">Failed to load events.</td></tr>';
+        } finally {
+            document.getElementById('spinner').classList.remove('show');
         }
     }
 
-    // Render table
-    function renderTable() {
-        tableBody.innerHTML = '';
-        if (events.length === 0 && currentPage === 1) {
-            tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No events found</td></tr>';
-        } else {
-            events.forEach(event => {
-                const partner = partners.find(p => p._id === event.partnerId) || { name: 'Unknown' };
-                const details = event.eventDetails.length > 50 ? event.eventDetails.substring(0, 47) + '...' : event.eventDetails;
-                const statusClass = event.status === 'active' ? 'bg-success' : event.status === 'pending' ? 'bg-warning' : 'bg-danger';
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td><input type="checkbox" class="row-checkbox"></td>
-                    <td>${event.date || 'N/A'}</td>
-                    <td>${partner.name}</td>
-                    <td>${details}</td>
-                    <td>${event.time || 'N/A'}</td>
-                    <td><span class="badge ${statusClass}">${event.status.charAt(0).toUpperCase() + event.status.slice(1)}</span></td>
-                    <td>
-                        <a class="btn btn-sm btn-primary edit-btn" href="#" data-id="${event._id}">Edit</a> |
-                        <a class="btn btn-sm btn-${event.status === 'active' ? 'danger' : 'success'} status-btn" href="#" data-id="${event._id}">
-                            ${event.status === 'active' ? 'Deactivate' : 'Activate'}
-                        </a>
-                    </td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
+    // Render events table
+    function renderEvents(events, total, page, pages) {
+        eventTableBody.innerHTML = '';
+        events.forEach(event => {
+            const row = document.createElement('tr');
+            const fromDate = formatDisplayDate(event.eventDetails.fromDate,event.eventDetails.timeZone);
+            const toDate = formatDisplayDate(event.eventDetails.toDate,event.eventDetails.timeZone);
+            const dateRange = fromDate === toDate ? fromDate : `${fromDate} - ${toDate}`;
+            const newStatus = event.status === 'active' ? 'inactive' : 'active';
+            row.innerHTML = `
+                <td>${dateRange}</td>
+                <td>${event.partner?.restaurantName || 'N/A'}</td>
+                <td>${event.eventDetails.description || 'N/A'}</td>
+                <td>${event.eventDetails.fromTime} - ${event.eventDetails.toTime}</td>
+                <td>${event.eventDetails.timeZone || 'N/A'}</td>
+                <td><span class="badge ${event.status === 'active' ? 'bg-success' : 'bg-warning'}">${event.status.charAt(0).toUpperCase() + event.status.slice(1)}</span></td>
+                <td>
+                    <a href="./view-event.html?id=${event._id}" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i> View</a>
+                    <button class="btn btn-sm btn-warning statusBtn" data-id="${event._id}" data-status="${newStatus}"><i class="fa fa-sync"></i> Set ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)}</button>
+                </td>
+            `;
+            eventTableBody.appendChild(row);
+        });
 
         // Update page info
-        const start = (currentPage - 1) * rowsPerPage + 1;
-        const end = start + events.length - 1;
-        pageInfo.textContent = events.length > 0
-            ? `Showing ${start} to ${end} of unknown entries`
-            : `Showing 0 to 0 of unknown entries`;
+        const start = (page - 1) * limit + 1;
+        const end = Math.min(page * limit, total);
+        pageInfo.textContent = `Showing ${start} to ${end} of ${total} entries`;
 
-        // Add event listeners
-        document.querySelectorAll('.edit-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const eventId = btn.getAttribute('data-id');
-                const event = events.find(e => e._id === eventId);
-                openEditModal(event);
-            });
-        });
-        document.querySelectorAll('.status-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const eventId = btn.getAttribute('data-id');
-                toggleStatus(eventId);
-            });
-        });
-    }
-
-    // Render pagination
-    function renderPagination() {
+        // Render pagination
         pagination.innerHTML = '';
-        const prevItem = document.createElement('li');
-        prevItem.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
-        prevItem.innerHTML = `<a class="page-link" href="#">Previous</a>`;
-        prevItem.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (currentPage > 1) {
-                currentPage--;
-                fetchEvents();
-            }
-        });
-        pagination.appendChild(prevItem);
-
-        for (let i = 1; i <= maxKnownPage; i++) {
-            const pageItem = document.createElement('li');
-            pageItem.className = `page-item ${i === currentPage ? 'active' : ''}`;
-            pageItem.innerHTML = `<a class="page-link" href="#">${i}</a>`;
-            pageItem.addEventListener('click', (e) => {
+        for (let i = 1; i <= pages; i++) {
+            const li = document.createElement('li');
+            li.className = `page-item ${i === page ? 'active' : ''}`;
+            li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+            li.addEventListener('click', (e) => {
                 e.preventDefault();
                 currentPage = i;
-                fetchEvents();
+                fetchEvents(i);
             });
-            pagination.appendChild(pageItem);
+            pagination.appendChild(li);
         }
 
-        const nextItem = document.createElement('li');
-        nextItem.className = `page-item ${!hasNextPage ? 'disabled' : ''}`;
-        nextItem.innerHTML = `<a class="page-link" href="#">Next</a>`;
-        nextItem.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (hasNextPage) {
-                currentPage++;
-                fetchEvents();
-            }
+        // Attach status update listeners
+        document.querySelectorAll('.statusBtn').forEach(btn => {
+            btn.addEventListener('click', () => updateStatus(btn.dataset.id, btn.dataset.status));
         });
-        pagination.appendChild(nextItem);
     }
 
-    // Select All Checkbox
-    selectAll.addEventListener('change', () => {
-        document.querySelectorAll('.row-checkbox').forEach(checkbox => {
-            checkbox.checked = selectAll.checked;
-        });
-    });
-
-    // Handle Add Event Form Submission
+    // Add event
     addEventForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(addEventForm);
+        formData.set('timeZone', Intl.DateTimeFormat().resolvedOptions().timeZone);
         try {
-            const response = await fetch('YOUR_BACKEND_API_ENDPOINT/events', {
+            console.log('Adding new event');
+            const response = await fetch(`${baseURL}/admin/event/addEvent`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${adminToken}`
                 },
                 body: formData
             });
-            if (!response.ok) throw new Error('Failed to add event');
+            if (response.status !== 200) throw new Error(`Failed to add event: ${response.status}`);
             const result = await response.json();
-            if (result.status !== 'Success') throw new Error(result.message || 'Failed to add event');
+            if (result.status !== 'Success') throw new Error(result.message || 'Add event failed');
             alert('Event added successfully!');
             addEventForm.reset();
-            fetchEvents();
+            fetchEvents(currentPage);
         } catch (error) {
             console.error('Error adding event:', error);
             alert('Failed to add event. Please try again.');
         }
     });
 
-    // Open Edit Modal
-    function openEditModal(event) {
-        document.getElementById('eventId').value = event._id;
-        document.getElementById('editPartnerId').value = event.partnerId || '';
-        document.getElementById('editDate').value = event.date || '';
-        document.getElementById('editTime').value = event.time || '';
-        document.getElementById('editEventDetails').value = event.eventDetails || '';
-        const currentPhotosDiv = document.getElementById('currentPhotos');
-        currentPhotosDiv.innerHTML = event.photo?.length > 0
-            ? event.photo.map(img => `<img src="${img.path}" alt="${img.originalname || 'Event Photo'}">`).join('')
-            : '<p>No current photos</p>';
-        modal.style.display = 'block';
-    }
-
-    // Close Modal
-    closeModalBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
-
-    // Close Modal on Outside Click
-    window.addEventListener('click', (event) => {
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
-
-    // Handle Edit Form Submission
-    editEventForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const eventId = document.getElementById('eventId').value;
-        const formData = new FormData(editEventForm);
+    // Update status
+    async function updateStatus(eventId, newStatus) {
         try {
-            const response = await fetch(`YOUR_BACKEND_API_ENDPOINT/events/${eventId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                },
-                body: formData
-            });
-            if (!response.ok) throw new Error('Failed to update event');
-            alert('Event updated successfully!');
-            modal.style.display = 'none';
-            fetchEvents();
-        } catch (error) {
-            console.error('Error updating event:', error);
-            alert('Failed to update event. Please try again.');
-        }
-    });
-
-    // Toggle Event Status
-    async function toggleStatus(eventId) {
-        const event = events.find(e => e._id === eventId);
-        const newStatus = event.status === 'active' ? 'inactive' : 'active';
-        try {
-            const response = await fetch(`YOUR_BACKEND_API_ENDPOINT/events/${eventId}/status`, {
+            console.log(`Updating status for event ${eventId} to ${newStatus}`);
+            const response = await fetch(`${baseURL}/admin/event/updateEvent/${eventId}`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${adminToken}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ status: newStatus })
             });
-            if (!response.ok) throw new Error('Failed to update status');
-            alert(`Event ${newStatus === 'active' ? 'activated' : 'deactivated'} successfully!`);
-            fetchEvents();
+            if (response.status !== 200) throw new Error(`Failed to update status: ${response.status}`);
+            const result = await response.json();
+            if (result.status !== 'Success') throw new Error(result.message || 'Status update failed');
+            alert(`Event status updated to ${newStatus}!`);
+            fetchEvents(currentPage);
         } catch (error) {
             console.error('Error updating status:', error);
             alert('Failed to update status. Please try again.');
         }
     }
 
-    // Initial fetch
-    fetchPartners();
+    // Initialize
+    populatePartners(document.getElementById('partnerId'));
     fetchEvents();
 });
