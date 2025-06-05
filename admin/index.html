@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -32,8 +31,119 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
-</head>
 
+    <!-- Custom Styles for Notifications and Modal -->
+    <style>
+        .notification-scroll {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 5px;
+        }
+        .notification-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        .notification-actions {
+            margin-top: 5px;
+        }
+        .notification-actions .btn {
+            margin-right: 5px;
+            font-size: 12px;
+        }
+        .mark-all-read {
+            display: block;
+            text-align: center;
+            padding: 5px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+            color: #007bff;
+            cursor: pointer;
+        }
+        .mark-all-read:hover {
+            background-color: #e9ecef;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            color: #000;
+        }
+        .modal-content h5 {
+            margin-bottom: 15px;
+        }
+        .modal-content p {
+            margin-bottom: 20px;
+        }
+        .modal-content .btn {
+            margin-right: 10px;
+        }
+        /* Adjust dropdown toggle layout */
+        .nav-item.dropdown .nav-link.dropdown-toggle {
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-right: 20px; /* Space for the caret */
+        }
+        /* Style the caret (dropdown arrow) */
+        .nav-item.dropdown .nav-link.dropdown-toggle::after {
+            margin-left: 5px; /* Space between name and caret */
+            border-top: 0.3em solid; /* Default Bootstrap caret size */
+            border-right: 0.3em solid transparent;
+            border-left: 0.3em solid transparent;
+            position: static; /* Remove absolute positioning */
+            display: inline-block; /* Make it inline with the content */
+            vertical-align: middle; /* Align with text */
+        }
+        /* Ensure profile redirect span is inline */
+        #profileRedirect {
+            display: flex;
+            align-items: center;
+        }
+        /* Ensure dropdown menu visibility */
+        .dropdown-menu.show {
+            display: block !important;
+        }
+        /* Style the logout button */
+        .dropdown-item#logoutBtn {
+            color: #dc3545; /* Red color for logout */
+            font-weight: 500;
+            padding: 8px 16px;
+        }
+        .dropdown-item#logoutBtn:hover {
+            background-color: #f8f9fa;
+            color: #c82333;
+        }
+    </style>
+</head>
 <body>
     <div class="container-fluid position-relative bg-white d-flex p-0">
         <!-- Spinner Start -->
@@ -61,22 +171,10 @@
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="./dashboard/partner/partner.html" class="nav-item nav-link"><i class="fa fa-id-card me-2"></i>Partner</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-user me-2"></i>Member</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="./dashboard/member/member.html" class="dropdown-item">Member list</a>
-                            <a href="./dashboard/member/requested-member.html" class="dropdown-item">Requested Member</a>
-                        </div>
-                    </div>
+                    <a href="./dashboard/partner/partner.html" class="nav-item nav-link"><i class="fa fa-id-card me-2"></i>Partners</a>
+                    <a href="./dashboard/member/member.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Members</a>
                     <a href="./dashboard/event/event.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Events</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-table me-2"></i>Booking</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="./dashboard/booking/confirm-booking.html" class="dropdown-item">Confirm</a>
-                            <a href="./dashboard/booking/pending-booking.html" class="dropdown-item">Pending</a>
-                        </div>
-                    </div>
+                    <a href="./dashboard/booking/booking.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Bookings</a>
                 </div>
             </nav>
         </div>
@@ -95,35 +193,49 @@
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="fa fa-bell me-lg-2"></i>
-                            <span class="d-none d-lg-inline-flex">Notification</span>
+                            <i class="fas fa-bell me-2"></i>
+                            <span class="d-none d-lg-inline-flex">Notifications</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0" id="notificationDropdown">
-                            <!-- Notifications populated dynamically -->
+                            <a href="#" class="mark-all-read" id="markAllReadBtn">Mark All as Read</a>
+                            <div class="notification-scroll" id="notificationList">
+                                <!-- Notifications populated dynamically -->
+                            </div>
                         </div>
                     </div>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                            <span class="d-none d-lg-inline-flex">John Doe</span>
+                        <a href="#" class="nav-link dropdown-toggle" id="profilePhotoLink" data-bs-toggle="dropdown">
+                            <span id="profileRedirect" class="d-flex align-items-center">
+                                <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <span class="d-none d-sm-inline-flex">John Doe</span>
+                            </span>
                         </a>
-                        <!-- <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item" id="profileBtn">Profile</a>
-                        </div> -->
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item" id="logoutBtn">Log Out</a>
+                            <a href="#" class="dropdown-item" id="logoutBtn">Logout</a>
                         </div>
                     </div>
                 </div>
             </nav>
-            
+            <!-- Navbar End -->
+
+            <!-- Notification Modal -->
+            <div id="notificationModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-btn" id="closeModalBtn">×</span>
+                    <h3 id="modalTitle"></h3>
+                    <p id="modalMessage"></p>
+                    <div class="d-flex justify-content-end">
+                        <button id="modalMarkReadBtn" class="btn btn-sm btn-secondary">Mark as Read</button>
+                    </div>
+                </div>
+            </div>
 
             <!-- Dynamic Tables Start -->
             <div class="container-fluid pt-4 px-4">
-                <div class="row g-4">
+                <div class="row">
                     <!-- Pending Members Table -->
                     <div class="col-sm-12 col-xl-6">
-                        <div class="bg-light rounded p-4">
+                        <div class="bg-light rounded p-3">
                             <div class="d-flex align-items-center justify-content-between mb-4">
                                 <h6 class="mb-0">Pending Members</h6>
                                 <a href="./dashboard/member/member.html">Show All</a>
@@ -132,15 +244,14 @@
                                 <table class="table text-start align-middle table-bordered table-hover mb-0">
                                     <thead>
                                         <tr class="text-dark">
-                                            <th scope="col"><input class="form-check-input" type="checkbox"></th>
                                             <th scope="col">Name</th>
                                             <th scope="col">Email</th>
-                                            <th scope="col">Requested Date</th>
+                                            <th scope="col">Date</th>
                                             <th scope="col">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody id="pendingMembersTable">
-                                        <!-- Populated dynamically -->
+                                        <!-- Table data populated dynamically -->
                                     </tbody>
                                 </table>
                             </div>
@@ -148,16 +259,15 @@
                     </div>
                     <!-- Pending Bookings Table -->
                     <div class="col-sm-12 col-xl-6">
-                        <div class="bg-light rounded p-4">
+                        <div class="bg-light rounded p-3">
                             <div class="d-flex align-items-center justify-content-between mb-4">
                                 <h6 class="mb-0">Pending Bookings</h6>
-                                <a href="./dashboard/booking/pending-booking.html">Show All</a>
+                                <a href="./dashboard/booking/booking.html">Show All</a>
                             </div>
                             <div class="table-responsive">
                                 <table class="table text-start align-middle table-bordered table-hover mb-0">
                                     <thead>
                                         <tr class="text-dark">
-                                            <th scope="col"><input class="form-check-input" type="checkbox"></th>
                                             <th scope="col">Booking ID</th>
                                             <th scope="col">Customer</th>
                                             <th scope="col">Date</th>
@@ -165,7 +275,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="pendingBookingsTable">
-                                        <!-- Populated dynamically -->
+                                        <!-- Table data populated dynamically -->
                                     </tbody>
                                 </table>
                             </div>
@@ -173,7 +283,7 @@
                     </div>
                     <!-- Upcoming Events Table -->
                     <div class="col-sm-12 col-xl-6">
-                        <div class="bg-light rounded p-4">
+                        <div class="bg-light rounded p-3">
                             <div class="d-flex align-items-center justify-content-between mb-4">
                                 <h6 class="mb-0">Upcoming Events</h6>
                                 <a href="./dashboard/event/event.html">Show All</a>
@@ -182,7 +292,6 @@
                                 <table class="table text-start align-middle table-bordered table-hover mb-0">
                                     <thead>
                                         <tr class="text-dark">
-                                            <th scope="col"><input class="form-check-input" type="checkbox"></th>
                                             <th scope="col">Event Name</th>
                                             <th scope="col">Date</th>
                                             <th scope="col">Location</th>
@@ -190,44 +299,47 @@
                                         </tr>
                                     </thead>
                                     <tbody id="upcomingEventsTable">
-                                        <!-- Populated dynamically -->
+                                        <!-- Table data populated dynamically -->
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
+
                     <!-- Pending Events Table -->
-    <div class="col-sm-12 col-xl-6">
-        <div class="bg-light rounded p-4">
-            <div class="d-flex align-items-center justify-content-between mb-4">
-                <h6 class="mb-0">Pending Events</h6>
-                <a href="./dashboard/event/event.html">Show All</a>
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light rounded p-3">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">Pending Events</h6>
+                                <a href="./dashboard/event/event.html">Show All</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                                    <thead>
+                                        <tr class="text-dark">
+                                            <th scope="col">Event Name</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Location</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pendingEventsTable">
+                                        <!-- Table data populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="table-responsive">
-                <table class="table text-start align-middle table-bordered table-hover mb-0">
-                    <thead>
-                        <tr class="text-dark">
-                            <th scope="col"><input class="form-check-input" type="checkbox"></th>
-                            <th scope="col">Event Name</th>
-                            <th scope="col">Date</th>
-                            <th scope="col">Location</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="pendingEventsTable">
-                        <!-- Populated dynamically -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+            <!-- Dynamic Tables End -->
 
             <!-- Footer Start -->
             <div class="container-fluid pt-4 px-4">
                 <div class="bg-light rounded-top p-4">
                     <div class="row">
                         <div class="col-12 col-sm-6 text-center text-sm-start">
-                            © <a href="#">LYNQ</a>, All Right Reserved.
+                            © <a href="#">LYNQ</a>, All Rights Reserved.
                         </div>
                         <div class="col-12 col-sm-6 text-center text-sm-end">
                             Designed By <a href="https://hucode.tech">HU Code</a>
@@ -255,8 +367,5 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
-
-    
 </body>
-
 </html>

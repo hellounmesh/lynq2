@@ -1,0 +1,294 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+
+body, html {
+  height: 100%;
+  line-height: 1.8;
+}
+.w3-bar .w3-button {
+  padding: 16px;
+}
+
+/* Modal styles for booking */
+.w3-modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.w3-modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.booking-form input {
+  padding: 8px;
+  font-size: 16px;
+}
+
+.booking-form button {
+  padding: 10px;
+  background-color: #000080; /* Navy blue for Proceed button */
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.booking-form button:hover {
+  background-color: #000066; /* Slightly darker navy blue for hover */
+}
+
+.filter-container {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.filter-container select {
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 4px;
+  width: 200px;
+}
+
+.w3-button.book-btn {
+  background-color: #000080; /* Navy blue for Book buttons */
+  color: white;
+}
+
+.w3-button.book-btn:hover {
+  background-color: #000066; /* Slightly darker navy blue for hover */
+}
+
+/* Square image styling */
+.club-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* Ensures square aspect ratio */
+  object-fit: cover; /* Scales image to cover the square area */
+}
+</style>
+</head>
+<body>
+<!-- Team Section -->
+<div class="w3-container" style="padding:0px 16px" id="team">
+  <h3 class="w3-center">Club List</h3>
+  
+  <!-- Filter Dropdown -->
+  <div class="filter-container">
+    <label for="typeFilter"></label>
+    <select id="typeFilter" onchange="filterClubs()">
+      <option value="all">All Types</option>
+      <using System;
+using System.Linq;
+
+namespace ClubFilterExample
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Sample data representing clubs
+            var clubs = new[]
+            {
+                new Club { Name = "Name 1", Type = "beach club", Description = "Description 1" },
+                new Club { Name = "Name 2", Type = "club", Description = "Description 2" },
+                new Club { Name = "Name 3", Type = "hotel", Description = "Description 3" }
+            };
+
+            // Simulate filter selection
+            string selectedFilter = "beach club"; // Example filter
+
+            // Filter clubs based on selected type
+            var filteredClubs = clubs.Where(club => selectedFilter == "all" || club.Type == selectedFilter).ToList();
+
+            // Output filtered clubs
+            foreach (var club in filteredClubs)
+            {
+                Console.WriteLine($"Club: {club.Name}, Type: {club.Type}, Description: {club.Description}");
+            }
+        }
+    }
+
+    class Club
+    {
+        public string Name { get; set; }
+        public string Type { get; set; }
+        public string Description { get; set; }
+    }
+} option value="beach club">Beach Club</option>
+      <option value="club">Club</option>
+      <option value="hotel">Hotel</option>
+    </select>
+  </div>
+  
+  <div class="w3-row-padding" style="margin-top:64px" id="clubList">
+    <div class="w3-col l3 m6 w3-margin-bottom club-card" data-type="beach club">
+      <div class="w3-card">
+        <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/19/21/2f/57/piscina-principal-en.jpg?w=900&h=500&s=1" alt="John" style="width:100%">
+        <div class="w3-container">
+          <h3>Name 1</h3>
+          <p class="w3-opacity">beach club</p>
+          <p>Description</p>
+          <p><button class="w3-button book-btn w3-block" onclick="openBookingModal('Name 1')">Book</button></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="w3-col l3 m6 w3-margin-bottom club-card" data-type="club">
+      <div class="w3-card">
+        <img src="https://w0.peakpx.com/wallpaper/114/573/HD-wallpaper-hotel-atlantis-dubai-united-arab-emirates-luxury-hotels-beach-coast-uae-persian-gulf-ocean.jpg" alt="John" style="width:100%">
+        <div class="w3-container">
+          <h3>Name 2</h3>
+          <p class="w3-opacity">club</p>
+          <p>Description</p>
+          <p><button class="w3-button book-btn w3-block" onclick="openBookingModal('Name 2')">Book</button></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="w3-col l3 m6 w3-margin-bottom club-card" data-type="hotel">
+      <div class="w3-card">
+        <img src="https://images.rawpixel.com/image_social_landscape/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3Vwd2s2MTc2MDMzOC13aWtpbWVkaWEtaW1hZ2Uta293cWw2d2YuanBn.jpg" alt="John" style="width:100%">
+        <div class="w3-container">
+          <h3>Name 3</h3>
+          <p class="w3-opacity">hotel</p>
+          <p>Description</p>
+          <p><button class="w3-button book-btn w3-block" onclick="openBookingModal('Name 3')">Book</button></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Booking Modal -->
+<div id="bookingModal" class="w3-modal">
+  <div class="w3-modal-content">
+    <span class="close" onclick="closeBookingModal()">×</span>
+    <h2>Book <span id="clubName"></span></h2>
+    <div class="booking-form">
+      <label for="bookingDate">Select Date:</label>
+      <input type="date" id="bookingDate" required>
+      <label for="bookingTime">Select Time:</label>
+      <input type="time" id="bookingTime" required>
+      <button onclick="proceedBooking()">Proceed</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Modal Image Gallery
+function onClick(element) {
+  document.getElementById("img01").src = element.src;
+  document.getElementById("modal01").style.display = "block";
+  var captionText = document.getElementById("caption");
+  captionText.innerHTML = element.alt;
+}
+
+// Toggle between showing and hiding the sidebar when clicking the menu icon
+var mySidebar = document.getElementById("mySidebar");
+
+function w3_open() {
+  if (mySidebar.style.display === 'block') {
+    mySidebar.style.display = 'none';
+  } else {
+    mySidebar.style.display = 'block';
+  }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+    mySidebar.style.display = "none";
+}
+
+// Booking Modal Functions
+function openBookingModal(clubName) {
+  document.getElementById('bookingModal').style.display = 'block';
+  document.getElementById('clubName').textContent = clubName;
+  
+  // Set minimum date to today
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('bookingDate').setAttribute('min', today);
+}
+
+function closeBookingModal() {
+  document.getElementById('bookingModal').style.display = 'none';
+  // Reset form
+  document.getElementById('bookingDate').value = '';
+  document.getElementById('bookingTime').value = '';
+}
+
+function proceedBooking() {
+  const date = document.getElementById('bookingDate').value;
+  const time = document.getElementById('bookingTime').value;
+  const club = document.getElementById('clubName').textContent;
+  
+  if (date && time) {
+    alert(`Booking confirmed for ${club} on ${date} at ${time}`);
+    closeBookingModal();
+  } else {
+    alert('Please select both date and time');
+  }
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+  const modal = document.getElementById('bookingModal');
+  if (event.target == modal) {
+    closeBookingModal();
+  }
+}
+
+// Filter Clubs Function
+function filterClubs() {
+  const filterValue = document.getElementById('typeFilter').value.toLowerCase();
+  const clubCards = document.getElementsByClassName('club-card');
+  
+  for (let card of clubCards) {
+    const type = card.getAttribute('data-type').toLowerCase();
+    if (filterValue === 'all' || type === filterValue) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  }
+}
+</script>
+
+</body>
+</html>

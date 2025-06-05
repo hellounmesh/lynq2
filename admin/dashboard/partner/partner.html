@@ -28,6 +28,114 @@
 
     <!-- Template Stylesheet -->
     <link href="../../css/style.css" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <style>
+        .notification-scroll {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 5px;
+        }
+        .notification-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        .notification-actions {
+            margin-top: 5px;
+        }
+        .notification-actions .btn {
+            margin-right: 5px;
+            font-size: 12px;
+        }
+        .mark-all-read {
+            display: block;
+            text-align: center;
+            padding: 5px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+            color: #007bff;
+            cursor: pointer;
+        }
+        .mark-all-read:hover {
+            background-color: #e9ecef;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            color: #000;
+        }
+        .modal-content h5 {
+            margin-bottom: 15px;
+        }
+        .modal-content p {
+            margin-bottom: 20px;
+        }
+        .modal-content .btn {
+            margin-right: 10px;
+        }
+        /* Adjust dropdown toggle layout */
+        .nav-item.dropdown .nav-link.dropdown-toggle {
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-right: 20px;
+        }
+        .nav-item.dropdown .nav-link.dropdown-toggle::after {
+            margin-left: 5px;
+            border-top: 0.3em solid;
+            border-right: 0.3em solid transparent;
+            border-left: 0.3em solid transparent;
+            position: static;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        #profileRedirect {
+            display: flex;
+            align-items: center;
+        }
+        .dropdown-menu.show {
+            display: block !important;
+        }
+        .dropdown-item#logoutBtn {
+            color: #dc3545;
+            font-weight: 500;
+            padding: 8px 16px;
+        }
+        .dropdown-item#logoutBtn:hover {
+            background-color: #f8f9fa;
+            color: #c82333;
+        }
+    </style>
 </head>
 
 <body>
@@ -39,7 +147,6 @@
             </div>
         </div>
         <!-- Spinner End -->
-
 
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
@@ -58,7 +165,6 @@
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <!--<a href="index.html" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>-->
                     <a href="../partner/partner.html" class="nav-item nav-link"><i class="fa fa-id-card me-2"></i>Partner</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-user me-2"></i>Member</a>
@@ -75,13 +181,10 @@
                             <a href="../member/requested-member.html" class="dropdown-item">Pending</a>
                         </div>
                     </div>
-                    
-                    </div>
                 </div>
             </nav>
         </div>
         <!-- Sidebar End -->
-
 
         <!-- Content Start -->
         <div class="content">
@@ -93,180 +196,181 @@
                 <a href="#" class="sidebar-toggler flex-shrink-0">
                     <i class="fa fa-bars"></i>
                 </a>
-                <!--<form class="d-none d-md-flex ms-4">
-                    <input class="form-control border-0" type="search" placeholder="Search">
-                </form>-->
                 <div class="navbar-nav align-items-center ms-auto">
-                    
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="fa fa-bell me-lg-2"></i>
-                            <span class="d-none d-lg-inline-flex">Notificatin</span>
+                            <i class="fas fa-bell me-2"></i>
+                            <span class="d-none d-lg-inline-flex">Notifications</span>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">Profile updated</h6>
-                                <small>15 minutes ago</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">New user added</h6>
-                                <small>15 minutes ago</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">Password changed</h6>
-                                <small>15 minutes ago</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item text-center">See all notifications</a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0" id="notificationDropdown">
+                            <a href="#" class="mark-all-read" id="markAllReadBtn">Mark All as Read</a>
+                            <div class="notification-scroll" id="notificationList">
+                                <!-- Notifications populated dynamically -->
+                            </div>
                         </div>
                     </div>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img class="rounded-circle me-lg-2" src="../../img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                            <span class="d-none d-lg-inline-flex">John Doe</span>
+                        <a href="#" class="nav-link dropdown-toggle" id="profilePhotoLink" data-bs-toggle="dropdown">
+                            <span id="profileRedirect" class="d-flex align-items-center">
+                                <img class="rounded-circle me-lg-2" src="../../img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <span class="d-none d-sm-inline-flex">John Doe</span>
+                            </span>
                         </a>
-                        <!-- <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item" id="profileBtn">Profile</a>
-                        </div> -->
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item" id="logoutBtn">Log Out</a>
+                            <a href="#" class="dropdown-item" id="logoutBtn">Logout</a>
                         </div>
                     </div>
                 </div>
             </nav>
             <!-- Navbar End -->
 
-
-           
-<!-- Add pertner Start-->
-<div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-      <div class="col-sm-12 col-xl-12">
-        <div class="bg-light rounded h-100 p-4">
-          <h6 class="mb-4">Add Partner</h6>
-          <form id="partnerForm" enctype="multipart/form-data">
-            
-            <!-- Partner Name -->
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="name" placeholder="Partner Name" required>
-              <label for="name">Partner Name</label>
-            </div>
-  
-            <!-- Email -->
-            <div class="form-floating mb-3">
-              <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
-              <label for="email">Email address</label>
-            </div>
-            <!-- Passsword -->
-             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="password" placeholder="jlanajn5sad@" required>
-                <label for="password">Password</label>
-
-             </div>
-  
-            <!-- Phone Number -->
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="phone" placeholder="Phone Number" required>
-              <label for="phone">Phone Number</label>
-            </div>
-  
-            <!-- Company Name -->
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="restaurentName" placeholder="Restaurent Name" required>
-              <label for="restaurentName">Restaurent Name</label>
-            </div>
-  
-            <!-- Address Line 1 -->
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="addressLine1" placeholder="Address Line 1" required>
-              <label for="addressLine1">Address Line 1</label>
-            </div>
-  
-            <!-- Address Line 2 -->
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="addressLine2" placeholder="Address Line 2">
-              <label for="addressLine2">Address Line 2</label>
-            </div>
-  
-            <!-- Country -->
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="country" placeholder="Country" required>
-              <label for="country">Country</label>
-            </div>
-  
-            <!-- Thumbnail Image Upload -->
-            <div class="mb-3">
-              <label for="thumbnail" class="form-label">Upload Thumbnail Image</label>
-              <input class="form-control" type="file" id="thumbnail" accept="image/*" required>
-            </div>
-  
-            <!-- Slide Images Upload (Multiple) -->
-            <div class="mb-3">
-              <label for="slideImages" class="form-label">Upload Slide Images</label>
-              <input class="form-control" type="file" id="slideImages" accept="image/*" multiple required>
-            </div>
-  
-            <button type="submit" class="btn btn-primary" id="partnerSubmitBtn">Add Partner</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-<!-- Add pertner End-->
-
-<!-- Partner Details Start -->
-<div class="container-fluid pt-4 px-4">
-    <div class="bg-light text-center rounded p-4">
-        <div class="d-flex align-items-center justify-content-between mb-4">
-            <h6 class="mb-0">Partner Details</h6>
-        </div>
-        <div class="table-responsive">
-            <table class="table text-start align-middle table-bordered table-hover mb-0" id="partnerTable">
-                <thead>
-                    <tr class="text-dark">
-                        <th scope="col"><input type="checkbox" id="selectAll"></th>
-                        <th scope="col">Owner Name</th>
-                        <th scope="col">Restaurant Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Phone</th>
-                        <th scope="col">Password</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="partnerTableBody">
-                    <!-- Rows will be dynamically populated via JavaScript -->
-                </tbody>
-            </table>
-            <!-- Pagination Controls -->
-            <div class="d-flex justify-content-between mt-3">
-                <div>
-                    <span id="pageInfo">Showing 1 to 15 of unknown entries</span>
+            <!-- Notification Modal -->
+            <div id="notificationModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-btn" id="closeModalBtn">×</span>
+                    <h3 id="modalTitle"></h3>
+                    <p id="modalMessage"></p>
+                    <div class="d-flex justify-content-end">
+                        <button id="modalMarkReadBtn" class="btn btn-sm btn-secondary">Mark as Read</button>
+                    </div>
                 </div>
-                <nav>
-                    <ul class="pagination" id="pagination">
-                        <!-- Pagination links will be dynamically generated -->
-                    </ul>
-                </nav>
             </div>
-        </div>
-    </div>
-</div>
-<!-- Partner Details End -->
 
+            <!-- Add Partner Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-12 col-xl-12">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">Add Partner</h6>
+                            <form id="partnerForm" enctype="multipart/form-data">
+                                <!-- Partner Name -->
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="name" placeholder="Partner Name" required>
+                                    <label for="name">Partner Name</label>
+                                </div>
+                                <!-- Email -->
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+                                    <label for="email">Email address</label>
+                                </div>
+                                <!-- Password -->
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="password" placeholder="jlanajn5sad@" required>
+                                    <label for="password">Password</label>
+                                </div>
+                                <!-- Phone Number -->
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="phone" placeholder="Phone Number" required>
+                                    <label for="phone">Phone Number</label>
+                                </div>
+                                <!-- Property Name -->
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="restaurentName" placeholder="Property Name" required>
+                                    <label for="restaurentName">Property Name</label>
+                                </div>
+                                <!-- Property Type -->
+                                <div class="form-floating mb-3">
+                                    <select class="form-control" id="propertyType" required>
+                                        <option value="" disabled selected>Select Property Type</option>
+                                        <option value="Hotel">Hotel</option>
+                                        <option value="Restaurant">Restaurant</option>
+                                        <option value="Beach Hotel">Beach Hotel</option>
+                                        <option value="Night Club">Night Club</option>
+                                    </select>
+                                    <label for="propertyType">Property Type</label>
+                                </div>
+                                <!-- Address Line 1 -->
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="addressLine1" placeholder="Address Line 1" required>
+                                    <label for="addressLine1">Address Line 1</label>
+                                </div>
+                                <!-- Address Line 2 -->
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="addressLine2" placeholder="Address Line 2">
+                                    <label for="addressLine2">Address Line 2</label>
+                                </div>
+                                <!-- Country -->
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="country" placeholder="Country" required>
+                                    <label for="country">Country</label>
+                                </div>
+                                <!-- Thumbnail Image Upload -->
+                                <div class="mb-3">
+                                    <label for="thumbnail" class="form-label">Upload Thumbnail Image</label>
+                                    <input class="form-control" type="file" id="thumbnail" accept="image/*" required>
+                                </div>
+                                <!-- Slide Images Upload (Multiple) -->
+                                <div class="mb-3">
+                                    <label for="slideImages" class="form-label">Upload Slide Images</label>
+                                    <input class="form-control" type="file" id="slideImages" accept="image/*" multiple required>
+                                </div>
+                                <button type="submit" class="btn btn-primary" id="partnerSubmitBtn">Add Partner</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Add Partner End -->
+
+            <!-- Partner Details Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light text-center rounded p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <h6 class="mb-0">Partner Details</h6>
+                        <form id="searchForm" class="d-flex">
+                            <input class="form-control me-2" type="search" id="searchInput" placeholder="Search by Owner Name, Property Name, Email, or Type">
+                            <select class="form-control me-2" id="propertyTypeFilter">
+                                <option value="">All Types</option>
+                                <option value="Hotel">Hotel</option>
+                                <option value="Restaurant">Restaurant</option>
+                                <option value="Beach Hotel">Beach Hotel</option>
+                                <option value="Night Club">Night Club</option>
+                            </select>
+                            <button class="btn btn-primary" type="submit">Search</button>
+                        </form>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table text-start align-middle table-bordered table-hover mb-0" id="partnerTable">
+                            <thead>
+                                <tr class="text-dark">
+                                    <th scope="col">Owner Name</th>
+                                    <th scope="col">Property Name</th>
+                                    <th scope="col">Property Type</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Phone</th>
+                                    <th scope="col">Password</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="partnerTableBody">
+                                <!-- Rows will be dynamically populated via JavaScript -->
+                            </tbody>
+                        </table>
+                        <!-- Pagination Controls -->
+                        <div class="d-flex justify-content-between mt-3">
+                            <div>
+                                <span id="pageInfo">Showing 1 to 15 of unknown entries</span>
+                            </div>
+                            <nav>
+                                <ul class="pagination" id="pagination">
+                                    <!-- Pagination links will be dynamically generated -->
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Partner Details End -->
 
             <!-- Footer Start -->
             <div class="container-fluid pt-4 px-4">
                 <div class="bg-light rounded-top p-4">
                     <div class="row">
                         <div class="col-12 col-sm-6 text-center text-sm-start">
-                            &copy; <a href="#">LYNQ</a>, All Right Reserved. 
+                            © <a href="#">LYNQ</a>, All Right Reserved. 
                         </div>
                         <div class="col-12 col-sm-6 text-center text-sm-end">
-                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
                             Designed By <a href="https://hucode.tech">HU Code</a>
                         </div>
                     </div>
@@ -275,7 +379,6 @@
             <!-- Footer End -->
         </div>
         <!-- Content End -->
-
 
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
@@ -293,8 +396,458 @@
     <script src="../../lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <!-- Template Javascript -->
-    <!-- <script src="js/main.js"></script> -->
+    <script>
+        (function ($) {
+            "use strict";
+
+            // Spinner
+            var spinner = function () {
+                setTimeout(function () {
+                    if ($('#spinner').length > 0) {
+                        $('#spinner').removeClass('show');
+                    }
+                }, 1);
+            };
+            spinner();
+            
+            // Back to Top Button
+            $(window).scroll(function () {
+                if ($(this).scrollTop() > 300) {
+                    $('.back-to-top').fadeIn('slow');
+                } else {
+                    $('.back-to-top').fadeOut('slow');
+                }
+            });
+            $('.back-to-top').click(function () {
+                $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+                return false;
+            });
+
+            // Sidebar Toggler
+            $('.sidebar-toggler').click(function () {
+                $('.sidebar, .content').toggleClass("open");
+                return false;
+            });
+            
+        })(jQuery);
+
+        const baseURL = 'https://lynqdxb.onrender.com';
+        const partnerSubmitBtn = document.getElementById("partnerSubmitBtn");
+        const partnerForm = document.getElementById('partnerForm');
+        const adminToken = localStorage.getItem("adminToken");
+
+        if (!adminToken) {
+            alert('Please log in to access this page.');
+            setTimeout(() => {
+                window.location.href = '../../login/login.html';
+            }, 3000);
+        }
+
+        function logout() {
+            localStorage.removeItem('adminToken');
+            setTimeout(() => {
+                window.location.href = '../../login/login.html';
+            }, 1000);
+        }
+
+        document.getElementById("logoutBtn").addEventListener("click", (e) => {
+            e.preventDefault();
+            logout();
+        });
+
+        document.getElementById("profileRedirect").addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            window.location.href = '../profile/adminProfile.html';
+        });
+
+        // Format date and time for display (e.g., "Jun 6, 2025 01:52 AM")
+        function formatDateTime(date, timeZone) {
+            try {
+                if (!date || date === 'undefined' || date === 'null' || date === '' || typeof date !== 'string') {
+                    return 'N/A';
+                }
+                const parsedDate = new Date(date);
+                if (isNaN(parsedDate.getTime())) {
+                    console.warn('Invalid date:', date);
+                    return 'N/A';
+                }
+                return parsedDate.toLocaleString('en-US', {
+                    timeZone: timeZone || 'Asia/Kolkata',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true
+                });
+            } catch (error) {
+                console.error('Error formatting date and time:', date, error);
+                return 'N/A';
+            }
+        }
+
+        // Fetch data with authentication
+        async function fetchData(endpoint) {
+            try {
+                const response = await fetch(`${baseURL}${endpoint}`, {
+                    headers: {
+                        "Authorization": `Bearer ${adminToken}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+                if (response.status === 401) {
+                    alert("Session expired. Please log in again.");
+                    logout();
+                    return null;
+                }
+                if (response.status !== 200) throw new Error(`Failed to fetch ${endpoint}: ${response.status}`);
+                const result = await response.json();
+                if (result.status !== 'Success') throw new Error(`Backend status not Success: ${result.status}`);
+                return result.data;
+            } catch (error) {
+                console.error(`Error fetching ${endpoint}:`, error.message);
+                return null;
+            }
+        }
+
+        // Update navbar with admin's name and photo
+        function updateNavbar(admin) {
+            const profileLink = document.getElementById('profilePhotoLink');
+            const profileImg = profileLink.querySelector('img');
+            const profileName = profileLink.querySelector('span.d-none.d-sm-inline-flex');
+            profileName.textContent = admin.name || 'Admin';
+            const photoPath = admin.userInformation?.photo && admin.userInformation.photo.length > 0 
+                ? admin.userInformation.photo[0].path 
+                : '../../img/user.jpg';
+            profileImg.src = photoPath;
+            profileImg.alt = admin.name || 'Admin';
+        }
+
+        // Fetch admin details
+        async function fetchAdmin() {
+            try {
+                const data = await fetchData('/admin/view');
+                if (!data || !data.admin || !data.admin[0]) throw new Error('Invalid response structure');
+                const admin = data.admin[0];
+                updateNavbar(admin);
+                return admin;
+            } catch (error) {
+                console.error('Error fetching admin:', error.message);
+                alert('Failed to load admin profile: ' + error.message);
+                setTimeout(() => { window.location.href = '../../index.html'; }, 2000);
+            }
+        }
+
+        // Load notifications
+        async function loadNotifications() {
+            const notificationList = document.getElementById('notificationList');
+            notificationList.innerHTML = '<div class="notification-item text-center">Loading notifications...</div>';
+            const data = await fetchData('/admin/notification/allNotification');
+            if (!data) {
+                notificationList.innerHTML = '<div class="notification-item text-center">Failed to load notifications.</div>';
+                return;
+            }
+            if (!data.notifications || data.notifications.length === 0) {
+                notificationList.innerHTML = '<div class="notification-item text-center">No notifications found.</div>';
+                return;
+            }
+            notificationList.innerHTML = data.notifications.map(notification => `
+                <div class="notification-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="fw-normal mb-1">${notification.title || 'Untitled Notification'}</h6>
+                            <small>${formatDateTime(notification.createdAt, 'Asia/Kolkata')}</small>
+                        </div>
+                        <div class="notification-actions">
+                            <button class="btn btn-sm btn-primary view-btn" data-id="${notification._id}" data-title="${notification.title || 'Untitled Notification'}" data-message="${notification.message || 'No message'}" data-created-at="${notification.createdAt}">View</button>
+                            <button class="btn btn-sm btn-secondary mark-read-btn" data-id="${notification._id}">Mark as Read</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            document.querySelectorAll('.view-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const notificationId = e.target.dataset.id;
+                    const title = e.target.dataset.title;
+                    const message = e.target.dataset.message;
+                    const createdAt = e.target.dataset.createdAt;
+                    showNotificationModal(notificationId, title, message, createdAt);
+                });
+            });
+            document.querySelectorAll('.mark-read-btn').forEach(button => {
+                button.addEventListener('click', async (e) => {
+                    const notificationId = e.target.dataset.id;
+                    await markNotificationAsRead(notificationId);
+                });
+            });
+        }
+
+        // Show notification details in modal
+        function showNotificationModal(notificationId, title, message, createdAt) {
+            const modal = document.getElementById('notificationModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalMessage = document.getElementById('modalMessage');
+            const modalMarkReadBtn = document.getElementById('modalMarkReadBtn');
+            modalTitle.textContent = title;
+            modalMessage.innerHTML = `
+                <p><strong>Message:</strong> ${message}</p>
+                <p><strong>Date & Time:</strong> ${formatDateTime(createdAt, 'Asia/Kolkata')}</p>
+            `;
+            modal.style.display = 'block';
+            modalMarkReadBtn.dataset.id = notificationId;
+            modalMarkReadBtn.onclick = async () => {
+                await markNotificationAsRead(notificationId);
+                modal.style.display = 'none';
+            };
+            document.getElementById('closeModalBtn').onclick = () => { modal.style.display = 'none'; };
+            window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+        }
+
+        // Mark single notification as read
+        async function markNotificationAsRead(notificationId) {
+            try {
+                const response = await fetch(`${baseURL}/admin/notification/updateOne/${notificationId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        "Authorization": `Bearer ${adminToken}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+                if (response.status !== 200) throw new Error(`Failed to mark notification as read: ${response.status}`);
+                const result = await response.json();
+                if (result.status !== 'Success') throw new Error(result.message || 'Mark as read failed');
+                loadNotifications();
+            } catch (error) {
+                console.error('Error marking notification as read:', error.message);
+                alert('Failed to mark notification as read.');
+            }
+        }
+
+        // Mark all notifications as read
+        document.getElementById('markAllReadBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+                const response = await fetch(`${baseURL}/admin/notification/updateAll`, {
+                    method: 'PATCH',
+                    headers: {
+                        "Authorization": `Bearer ${adminToken}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+                if (response.status !== 200) throw new Error(`Failed to mark all notifications as read: ${response.status}`);
+                const result = await response.json();
+                if (result.status !== 'Success') throw new Error(result.message || 'Mark all as read failed');
+                loadNotifications();
+            } catch (error) {
+                console.error('Error marking all notifications as read:', error.message);
+                alert('Failed to mark all notifications as read.');
+            }
+        });
+
+        const addParnerDetails = async () => {
+            try {
+                const name = document.getElementById("name").value.trim();
+                const email = document.getElementById("email").value.trim();
+                const password = document.getElementById("password").value.trim();
+                const phone = document.getElementById("phone").value.trim();
+                const restaurentName = document.getElementById("restaurentName").value.trim();
+                const propertyType = document.getElementById("propertyType").value;
+                const addressLine1 = document.getElementById("addressLine1").value.trim();
+                const addressLine2 = document.getElementById("addressLine2").value.trim();
+                const country = document.getElementById("country").value.trim();
+                const thumbnailImgs = document.getElementById('thumbnail').files;
+                const slideImages = document.getElementById('slideImages').files;
+
+                const formData = new FormData();
+                formData.append("ownerName", name);
+                formData.append("email", email);
+                formData.append("password", password);
+                formData.append("phone", phone);
+                formData.append("restaurantName", restaurentName);
+                formData.append("proprtyType", propertyType);
+                formData.append('address.addressLine1', addressLine1);
+                formData.append('address.addressLine2', addressLine2);
+                formData.append("address.country", country);
+
+                if (thumbnailImgs) {
+                    for (let i = 0; i < thumbnailImgs.length; i++) {
+                        formData.append("partner-thumbnailImg", thumbnailImgs[i]);
+                    }
+                }
+
+                if (slideImages) {
+                    for (let i = 0; i < slideImages.length; i++) {
+                        formData.append("partner-galleryImg", slideImages[i]);
+                    }
+                }
+
+                const addpartnerURL = `${baseURL}/admin/partner/addPartner`;
+                const resp = await fetch(addpartnerURL, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Authorization': `Bearer ${adminToken}`
+                    }
+                });
+
+                const data = await resp.json();
+                if (data.status === 200) {
+                    const message = data.data?.message;
+                    alert(message);
+                    window.location.reload(); // Refresh to show new partner
+                } else {
+                    console.error(data);
+                    const message = data.data?.message;
+                    alert(message);
+                }
+            } catch (error) {
+                console.error("Error in addpartner details", error);
+                alert(error);
+            }
+        };
+
+        partnerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            addParnerDetails();
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const rowsPerPage = 15;
+            let currentPage = 1;
+            let partners = [];
+            let hasNextPage = true;
+            let maxKnownPage = 1;
+            let searchQuery = '';
+            let propertyTypeFilter = '';
+
+            const tableBody = document.getElementById('partnerTableBody');
+            const pagination = document.getElementById('pagination');
+            const pageInfo = document.getElementById('pageInfo');
+
+            async function fetchPartners() {
+                try {
+                    const adminToken = localStorage.getItem("adminToken");
+                    const skip = (currentPage - 1) * rowsPerPage;
+                    let getPartnerUrl = `${baseURL}/admin/partner/allPartner?skip=${skip}&limit=${rowsPerPage}`;
+                    if (searchQuery) getPartnerUrl += `&ownerName=${searchQuery}&restaurantName=${searchQuery}&email=${searchQuery}`;
+                    if (propertyTypeFilter) getPartnerUrl += `&type=${propertyTypeFilter}`;
+                    const response = await fetch(getPartnerUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${adminToken}`
+                        },
+                    });
+                    if (response.status !== 200) throw new Error('Failed to fetch partners');
+                    const result = await response.json();
+                    partners = result.data.partners || [];
+                    hasNextPage = partners.length === rowsPerPage;
+                    if (currentPage > maxKnownPage) maxKnownPage = currentPage;
+                    renderTable();
+                    renderPagination();
+                } catch (error) {
+                    console.error('Error fetching partners:', error);
+                    alert('Failed to load partner data. Please try again later.');
+                }
+            }
+
+            function renderTable() {
+                tableBody.innerHTML = '';
+                if (partners.length === 0 && currentPage === 1) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td colspan="8" class="text-center">No partners found</td>`;
+                    tableBody.appendChild(row);
+                } else {
+                    partners.forEach(partner => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${partner.ownerName || 'N/A'}</td>
+                            <td>${partner.restaurantName || 'N/A'}</td>
+                            <td>${partner.proprtyType || 'N/A'}</td>
+                            <td>${partner.email || 'N/A'}</td>
+                            <td>${partner.phone || 'N/A'}</td>
+                            <td>${partner.password ? '••••••••' : 'N/A'}</td>
+                            <td>
+                                <span class="badge ${partner.status === 'Active' ? 'bg-success' : 'bg-warning'}">
+                                    ${partner.status || 'Pending'}
+                                </span>
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-primary" href="viewPartner.html?id=${partner._id}">Detail</a>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                }
+                const start = (currentPage - 1) * rowsPerPage + 1;
+                const end = start + partners.length - 1;
+                pageInfo.textContent = partners.length > 0
+                    ? `Showing ${start} to ${end} of unknown entries`
+                    : `Showing 0 to 0 of unknown entries`;
+            }
+
+            function renderPagination() {
+                pagination.innerHTML = '';
+                const prevItem = document.createElement('li');
+                prevItem.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+                prevItem.innerHTML = `<a class="page-link" href="#">Previous</a>`;
+                prevItem.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (currentPage > 1) {
+                        currentPage--;
+                        fetchPartners();
+                    }
+                });
+                pagination.appendChild(prevItem);
+
+                for (let i = 1; i <= maxKnownPage; i++) {
+                    const pageItem = document.createElement('li');
+                    pageItem.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                    pageItem.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                    pageItem.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        currentPage = i;
+                        fetchPartners();
+                    });
+                    pagination.appendChild(pageItem);
+                }
+
+                const nextItem = document.createElement('li');
+                nextItem.className = `page-item ${!hasNextPage ? 'disabled' : ''}`;
+                nextItem.innerHTML = `<a class="page-link" href="#">Next</a>`;
+                nextItem.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (hasNextPage) {
+                        currentPage++;
+                        fetchPartners();
+                    }
+                });
+                pagination.appendChild(nextItem);
+            }
+
+            const searchForm = document.getElementById('searchForm');
+            searchForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                searchQuery = document.getElementById('searchInput').value.trim();
+                propertyTypeFilter = document.getElementById('propertyTypeFilter').value;
+                currentPage = 1;
+                fetchPartners();
+            });
+
+            console.log('partner.js loaded');
+            if (typeof bootstrap === 'undefined' || !bootstrap.Dropdown) {
+                console.error('Bootstrap JavaScript is not loaded properly.');
+            } else {
+                console.log('Bootstrap JavaScript is loaded successfully.');
+            }
+
+            await Promise.all([
+                fetchAdmin(),
+                loadNotifications(),
+                fetchPartners()
+            ]);
+        });
+    </script>
 </body>
-<!-- <script src="./js/partner.js"></script> -->
-<script type="module" src="./partner.js"></script>
 </html>

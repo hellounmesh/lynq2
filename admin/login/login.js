@@ -1,4 +1,4 @@
-const baseURL = " http://localhost:8000"
+const baseURL = "https://lynqdxb.onrender.com"
 // const firebaseConfig = {
 //     apiKey: "AIzaSyBHdUEAia7NTucKGIrqPBMSqXV9q0s6mkk",
 //     authDomain: "notify-4c612.firebaseapp.com",

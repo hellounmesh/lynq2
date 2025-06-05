@@ -1,5 +1,5 @@
 const { DateTime } = luxon;
-const baseURL = 'http://localhost:8000';
+const baseURL = 'https://lynqdxb.onrender.com';
 const adminToken = localStorage.getItem('adminToken');
 
 if (!adminToken) {

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="../../img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="../../lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="../../lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="../../css/style.css" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <style>
+        .admin-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        .admin-card:hover {
+            transform: translateY(-5px);
+        }
+        .admin-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        .gallery-img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+        .gallery-img:hover {
+            opacity: 0.8;
+        }
+        .badge {
+            font-size: 14px;
+            padding: 6px 12px;
+        }
+        .action-buttons .btn {
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            color: #000;
+        }
+        .modal-content label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: 500;
+        }
+        .modal-content input,
+        .modal-content select,
+        .modal-content textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .modal-content textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .modal-content input[type="file"] {
+            padding: 3px;
+        }
+        .modal-content button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .modal-content button:hover {
+            background-color: #0056b3;
+        }
+        .current-photos {
+            margin: 10px 0;
+            position: relative;
+        }
+        .current-photos img {
+            max-width: 100px;
+            height: auto;
+            border-radius: 4px;
+            margin: 5px;
+        }
+        .remove-img {
+            color: #dc3545;
+            cursor: pointer;
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #fff;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+        .photo-container {
+            position: relative;
+            display: inline-block;
+        }
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+            .gallery-img {
+                height: 80px;
+            }
+        }
+        /* Notification Styles (Copied from Dashboard) */
+        .notification-scroll {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 5px;
+        }
+        .notification-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        .notification-actions {
+            margin-top: 5px;
+        }
+        .notification-actions .btn {
+            margin-right: 5px;
+            font-size: 12px;
+        }
+        .mark-all-read {
+            display: block;
+            text-align: center;
+            padding: 5px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+            color: #007bff;
+            cursor: pointer;
+        }
+        .mark-all-read:hover {
+            background-color: #e9ecef;
+        }
+        /* Ensure dropdown menu visibility */
+        .dropdown-menu.show {
+            display: block !important;
+        }
+        /* Style the logout button */
+        .dropdown-item#logoutBtn {
+            color: #dc3545;
+            font-weight: 500;
+            padding: 8px 16px;
+        }
+        .dropdown-item#logoutBtn:hover {
+            background-color: #f8f9fa;
+            color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid position-relative bg-white d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-light navbar-light">
+                <a href="../../index.html" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>LYNQ ADMIN</h3>
+                </a>
+                <div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="position-relative">
+                        <img class="rounded-circle" src="../../img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                    </div>
+                    <div class="ms-3">
+                        <h6 class="mb-0">Master</h6>
+                        <span>Admin</span>
+                    </div>
+                </div>              
+                <div class="navbar-nav w-100">
+                    <a href="../partner/partner.html" class="nav-item nav-link"><i class="fa fa-id-card me-2"></i>Partners</a>
+                    <a href="../member/member.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Members</a>
+                    <a href="../event/event.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Events</a>
+                    <a href="../booking/booking.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Bookings</a>
+                    <a href="./adminProfile.html" class="nav-item nav-link active"><i class="fa fa-user me-2"></i>Profile</a>
+                </div>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+
+        <!-- Content Start -->
+        <div class="content">
+           <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
+                <a href="../../index.html" class="navbar-brand d-flex d-lg-none me-4">
+                    <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
+                </a>
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <div class="navbar-nav align-items-center ms-auto">
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fas fa-bell me-2"></i>
+                            <span class="d-none d-lg-inline-flex">Notifications</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0" id="notificationDropdown">
+                            <a href="#" class="mark-all-read" id="markAllReadBtn">Mark All as Read</a>
+                            <div class="notification-scroll" id="notificationList">
+                                <!-- Notifications populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" id="profilePhotoLink" data-bs-toggle="dropdown">
+                            <span id="profileRedirect" class="d-flex align-items-center">
+                                <img class="rounded-circle me-lg-2" src="../../img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <span class="d-none d-sm-inline-flex">John Doe</span>
+                            </span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                            <a href="#" class="dropdown-item" id="logoutBtn">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <!-- Navbar End -->
+
+            <!-- Notification Modal -->
+            <div id="notificationModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-btn" id="closeModalBtnNotif">×</span>
+                    <h3 id="modalTitle"></h3>
+                    <p id="modalMessage"></p>
+                    <div class="d-flex justify-content-end">
+                        <button id="modalMarkReadBtn" class="btn btn-sm btn-secondary">Mark as Read</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Profile Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light rounded p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h6 class="mb-0">Admin Profile</h6>
+                    </div>
+                    <div class="action-buttons mb-3">
+                        <button id="editBtn" class="btn btn-sm btn-primary"><i class="fa fa-edit me-2"></i>Edit Profile</button>
+                    </div>
+                    <div id="adminDetails" class="admin-card">
+                        <div class="text-center">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Admin Profile End -->
+
+            <!-- Edit Modal -->
+            <div id="editModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-btn" id="closeModalBtn">×</span>
+                    <h2>Edit Admin Profile</h2>
+                    <form id="editAdminForm" enctype="multipart/form-data">
+                        <input type="hidden" id="adminId" name="adminId">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" required>
+
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+
+                        <label for="mobile">Mobile:</label>
+                        <input type="tel" id="mobile" name="mobile" required>
+
+                        <label for="password">Password (leave blank to keep current):</label>
+                        <input type="password" id="password" name="password">
+
+                        <label for="description">Description:</label>
+                        <textarea id="description" name="userInformation[description]"></textarea>
+
+                        <label for="dob">Date of Birth:</label>
+                        <input type="date" id="dob" name="userInformation[dob]">
+
+                        <label for="interested">Interests:</label>
+                        <input type="text" id="interested" name="userInformation[interested]">
+
+                        <label for="profession">Profession:</label>
+                        <input type="text" id="profession" name="userInformation[profession]">
+
+                        <label for="gender">Gender:</label>
+                        <select id="gender" name="userInformation[gender]">
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+
+                        <label for="adminPhoto">Profile Photo:</label>
+                        <input type="file" id="adminPhoto" name="adminPhoto" accept="image/*">
+                        <div class="current-photos" id="currentPhoto"></div>
+
+                        <label for="adminGallery">Gallery Images:</label>
+                        <input type="file" id="adminGallery" name="adminGallery" accept="image/*" multiple>
+                        <div class="current-photos" id="currentGallery"></div>
+
+                        <button type="submit">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Footer Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light rounded-top p-4">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                            © <a href="#">LYNQ</a>, All Right Reserved. 
+                        </div>
+                        <div class="col-12 col-sm-6 text-center text-sm-end">
+                            Designed By <a href="https://hucode.tech">HU Code</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../lib/easing/easing.min.js"></script>
+    <script src="../../lib/waypoints/waypoints.min.js"></script>
+    <script src="../../lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="../../lib/tempusdominus/js/moment.min.js"></script>
+    <script src="../../lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="../../lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="./admin-profile.js"></script>
+</body>
+</html>

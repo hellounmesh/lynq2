@@ -1,4 +1,4 @@
-const baseURL = 'http://localhost:8000';
+const baseURL = 'https://lynqdxb.onrender.com';
 const adminToken = localStorage.getItem('adminToken');
 
 if (!adminToken) {
@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             console.log('Submitting update for partner:', partnerId);
             const response = await fetch(`${baseURL}/admin/partner/updatePartner/${partnerId}`, {
-                method: 'PATCH',
+                method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${adminToken}`
                 },
